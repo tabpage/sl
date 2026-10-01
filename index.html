@@ -8,9 +8,6 @@
 <meta name="theme-color" content="#1b1040">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b1040'/%3E%3Cpath d='M18 50V14M34 50V14M18 22h16M18 32h16M18 42h16' stroke='%23ffb347' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M42 12c10 8-8 14 2 22s-6 14-2 18' stroke='%2348d597' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 <style>
-/* ==========================================================================
-   DESIGN SYSTEM — theme variables are overwritten at runtime by THEMES[id].vars
-   ========================================================================== */
 :root{
   --bg-top:#1b1040;--bg-mid:#7a1d5c;--bg-bot:#f2713b;
   --accent:#ffb347;--accent2:#ff5d73;--accent-ink:#2a1200;
@@ -41,7 +38,7 @@ button,input,select{font:inherit;color:inherit}
 :focus-visible{outline:3px solid #fff;outline-offset:3px;border-radius:10px}
 h2:focus,h1:focus{outline:none}
 
-/* ---------- Buttons ---------- */
+/* ---------- Buttons (fix #10: sm min-height 44px) ---------- */
 .btn{appearance:none;border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
   min-height:44px;padding:.55rem 1.1rem;border-radius:14px;font-weight:800;letter-spacing:.02em;color:var(--ink);
   background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.08));
@@ -55,7 +52,7 @@ h2:focus,h1:focus{outline:none}
 .btn.primary:active{box-shadow:inset 0 0 0 1px rgba(255,255,255,.5),0 1px 0 color-mix(in srgb,var(--accent) 40%,#000)}
 .btn.danger{background:linear-gradient(180deg,#ff7b7b,#d63a4a);color:#fff}
 .btn.big{min-height:58px;font-size:1.12rem;padding:.7rem 1.6rem;border-radius:18px}
-.btn.sm{min-height:40px;padding:.35rem .8rem;font-size:.9rem}
+.btn.sm{min-height:44px;padding:.35rem .8rem;font-size:.9rem}
 .btn.icon{width:44px;padding:0}
 .btn[aria-disabled="true"]{opacity:.55;cursor:not-allowed;filter:saturate(.55);transform:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 4px 0 rgba(0,0,0,.3)}
 .btn svg{width:22px;height:22px;flex:none}
@@ -139,7 +136,6 @@ h2:focus,h1:focus{outline:none}
 @keyframes ready{0%,100%{transform:none}50%{transform:translateY(-2px)}}
 .keys{grid-column:1/-1;font-size:.76rem;color:var(--ink-dim);text-align:center}
 kbd{font:inherit;font-weight:800;padding:1px 6px;border-radius:6px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25)}
-/* Die */
 .die{width:84px;height:84px;border-radius:22%;background:linear-gradient(145deg,#fff,#d9deea);display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:13%;
   box-shadow:inset 0 -6px 0 rgba(0,0,0,.14),inset 0 3px 0 #fff,0 8px 0 #8c95a9,0 14px 18px rgba(0,0,0,.35);cursor:pointer;margin-bottom:8px}
 .die i{border-radius:50%;margin:16%;background:#1b2338;opacity:0;transform:scale(.4);transition:opacity .08s,transform .12s}
@@ -148,7 +144,6 @@ kbd{font:inherit;font-weight:800;padding:1px 6px;border-radius:6px;background:rg
 .die.land{animation:land .45s cubic-bezier(.3,1.6,.5,1)}
 @keyframes tumble{0%{transform:rotate(0) translateY(0)}25%{transform:rotate(100deg) translateY(-14px) scale(1.06)}50%{transform:rotate(200deg) translateY(0)}75%{transform:rotate(290deg) translateY(-8px) scale(1.03)}100%{transform:rotate(360deg)}}
 @keyframes land{0%{transform:translateY(-18px) scale(1.12) rotate(-8deg)}60%{transform:translateY(0) scale(.96)}100%{transform:none}}
-/* Players */
 .players{padding:10px;display:grid;gap:8px}
 .pcard{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:8px 10px;border-radius:14px;border:2px solid transparent;background:rgba(255,255,255,.06);transition:background .2s,border-color .2s}
 .pcard.current{border-color:var(--accent);background:rgba(255,255,255,.15)}
@@ -165,7 +160,6 @@ kbd{font:inherit;font-weight:800;padding:1px 6px;border-radius:6px;background:rg
 .ppos small{display:block;font-size:.66rem;font-weight:700;color:var(--ink-dim);letter-spacing:.08em;text-transform:uppercase}
 .ppos b{font-size:1.4rem}
 @media(max-aspect-ratio:1/1),(max-width:640px){.players{grid-template-columns:1fr 1fr}.pcard{grid-template-columns:auto 1fr;padding:6px 8px}.ppos{grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline}.ppos small{display:inline}.ppos b{font-size:1.05rem}}
-/* Log */
 .log{padding:8px 12px}
 .log summary{cursor:pointer;font-weight:800;min-height:34px;display:flex;align-items:center;list-style:none}
 .log summary::before{content:"▸";margin-right:8px;transition:transform .15s}
@@ -174,13 +168,11 @@ kbd{font:inherit;font-weight:800;padding:1px 6px;border-radius:6px;background:rg
 .log li{font-size:.84rem;display:flex;gap:6px;align-items:flex-start;padding:3px 0;border-top:1px solid rgba(255,255,255,.08)}
 .log li .g{flex:none;width:1.1em;text-align:center}
 .log li.empty{opacity:.7}
-/* Coach */
 .coach{padding:12px 14px;display:grid;gap:8px;border-color:var(--accent)}
 .coach h4{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
 .coach .btns{display:flex;gap:8px;justify-content:flex-end}
 .spot{outline:3px dashed var(--accent)!important;outline-offset:4px;border-radius:14px;animation:spot 1.4s ease-in-out infinite}
 @keyframes spot{50%{outline-color:#fff}}
-/* Board overlay banners */
 .turn-banner,.event-banner{position:absolute;left:50%;pointer-events:none;opacity:0;text-align:center;font-weight:900}
 .turn-banner{top:2.5%;transform:translate(-50%,-10px);padding:.4rem .9rem;border-radius:999px;background:rgba(10,8,24,.86);color:#fff;border:2px solid var(--accent);
   display:flex;align-items:center;gap:8px;transition:opacity .25s,transform .25s;font-size:clamp(.8rem,2.4vw,1.05rem);max-width:90%;white-space:nowrap}
@@ -190,7 +182,6 @@ kbd{font:inherit;font-weight:800;padding:1px 6px;border-radius:6px;background:rg
   font-size:clamp(1rem,3.6vw,1.9rem);color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.45);max-width:94%}
 .event-banner.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
 .event-banner.up{background:#12803a}.event-banner.down{background:#b3122f}.event-banner.win{background:#ffd23f;color:#2a1a00}.event-banner.info{background:#273056}
-/* Board SVG styling (colors flow from CSS variables) */
 .b-frame{fill:var(--frame);stroke:var(--accent);stroke-width:5}
 .b-inner{fill:var(--frame2)}
 .tile{stroke:var(--tileStroke);stroke-width:2}
@@ -213,7 +204,6 @@ kbd{font:inherit;font-weight:800;padding:1px 6px;border-radius:6px;background:rg
 .float{font:900 38px "Avenir Next",Arial,sans-serif;text-anchor:middle;paint-order:stroke;stroke:#10141f;stroke-width:8px;stroke-linejoin:round;animation:rise 1.3s ease-out forwards}
 @keyframes rise{from{transform:translateY(0);opacity:0}15%{opacity:1}to{transform:translateY(-70px);opacity:0}}
 
-/* ---------- Dialogs & toasts ---------- */
 dialog{border:0;padding:0;border-radius:24px;width:min(680px,calc(100vw - 20px));max-height:calc(100dvh - 24px);color:var(--ink);
   background:linear-gradient(160deg,var(--dlg1),var(--dlg2));box-shadow:0 30px 80px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.18);overflow:hidden}
 dialog[open]{display:flex;flex-direction:column;animation:pop .28s cubic-bezier(.3,1.4,.5,1)}
@@ -260,8 +250,6 @@ th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--in
 @keyframes toastIn{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
 .note{font-size:.8rem;color:var(--ink-dim)}
 noscript{position:fixed;inset:0;z-index:200;background:#10141f;color:#fff;display:grid;place-items:center;padding:20px;text-align:center}
-
-/* Reduced motion (class set from settings / OS preference) */
 html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
 html.rm .title-board{transform:none}
 @media(prefers-reduced-motion:reduce){.title-board{animation:none}}
@@ -275,7 +263,6 @@ html.rm .title-board{transform:none}
 <noscript>This game needs JavaScript enabled in your browser to run.</noscript>
 
 <main id="main">
-  <!-- ============================ TITLE ============================ -->
   <section id="screen-title" class="screen active" aria-labelledby="title-h">
     <div class="title-wrap">
       <div class="title-copy">
@@ -298,7 +285,6 @@ html.rm .title-board{transform:none}
     </div>
   </section>
 
-  <!-- ============================ SETUP ============================ -->
   <section id="screen-setup" class="screen" aria-labelledby="setup-h">
     <div class="setup-wrap panel">
       <div class="setup-head">
@@ -333,7 +319,6 @@ html.rm .title-board{transform:none}
     </div>
   </section>
 
-  <!-- ============================ GAME ============================ -->
   <section id="screen-game" class="screen" aria-label="Game board">
     <header class="topbar">
       <button id="g-menu" class="btn sm" aria-label="Open menu (Escape)">☰ Menu</button>
@@ -368,7 +353,6 @@ html.rm .title-board{transform:none}
   </section>
 </main>
 
-<!-- ============================ DIALOGS ============================ -->
 <dialog id="d-rules" aria-labelledby="d-rules-h">
   <div class="dlg-head"><h2 id="d-rules-h">How to play</h2><button class="btn sm" data-close>Close ✕</button></div>
   <div class="dlg-body">
@@ -430,19 +414,9 @@ html.rm .title-board{transform:none}
 
 <script>
 'use strict';
-/* =========================================================================
-   SNAKES & LADDERS — COAST TO COAST
-   Single-file architecture:
-    1 CONFIG   2 STRINGS   3 UTILS   4 STORAGE   5 DATA (themes/pieces/boards)
-    6 ENGINE (pure rules)  7 SOUND   8 SCOPE (cancellable timers/tweens)
-    9 SCENE (background)  10 CONFETTI  11 BOARD VIEW (SVG renderer)
-   12 MATCH CONTROLLER    13 UI (screens/dialogs/setup)   14 BOOT
-   Logic never reads the DOM; the renderer never owns game state.
-   Add ?debug to the URL for deterministic-dice testing helpers (window.__snl).
-   ========================================================================= */
 const DEBUG = /[?&]debug\b/.test(location.search);
+const CANCEL = Symbol('cancelled');   // Fix #1/#2: scope cancellation token
 
-/* ---------- 1. CONFIG ---------- */
 const CFG = {
   size: 100, minPlayers: 2, maxPlayers: 4, nameMax: 12,
   anim: { hopMs: 170, ladderMs: 900, snakeMs: 1050, diceMs: 650, thinkMs: 800, turnGapMs: 420, settleMs: 240, bannerMs: 1500 },
@@ -453,9 +427,8 @@ const CFG = {
   logMax: 40, leaderboardMax: 10, bigJump: 40,
   keyPrefix: 'snl.c2c.v1.'
 };
-const GEO = { vb: 1000, m: 20, t: 96 };   // board drawing geometry (SVG units)
+const GEO = { vb: 1000, m: 20, t: 96 };
 
-/* ---------- 2. STRINGS (centralised for future localisation) ---------- */
 const plural = (n, one, many) => `${n} ${n === 1 ? one : (many || one + 's')}`;
 const STR = {
   modes: {
@@ -476,7 +449,7 @@ const STR = {
   start: (n, goal) => `Race to ${goal}! First to tile 100 wins. ${n} goes first.`,
   order: names => `Turn order: ${names.join(' → ')}.`,
   banner: { ladder: (d) => `▲ LADDER +${d}`, snake: (d) => `▼ SNAKE −${d}`, win: n => `★ ${n} WINS! ★`, bonus: '⚄ BONUS ROLL', exact: 'EXACT ROLL NEEDED', bounce: '↩ BOUNCE BACK' },
-  roll: { ready: 'Roll the die', cpu: n => `${n} is playing…`, rolling: 'Rolling…', moving: 'Moving…', again: 'Play again' },
+  roll: { ready: 'Roll the die', cpu: n => `${n} is playing…`, rolling: 'Rolling…', moving: 'Moving…', special: 'Climbing…', waiting: 'Waiting…', again: 'Play again' },
   saved: 'Match saved. Continue any time from the title screen.',
   coach: [
     { sel: '#players', title: 'Step 1 of 5 · Your piece', text: 'Every player has a piece with a unique shape, number and colour. The highlighted card shows whose turn it is.' },
@@ -487,7 +460,6 @@ const STR = {
   ]
 };
 
-/* ---------- 3. UTILS ---------- */
 const q = (sel, root) => (root || document).querySelector(sel);
 const qa = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -512,7 +484,7 @@ function s(tag, attrs, ...kids) {
   for (const c of kids.flat()) if (c) el.append(c);
   return el;
 }
-function secureInt(n) {            // unbiased integer in [0,n)
+function secureInt(n) {
   const c = window.crypto;
   if (c && c.getRandomValues) {
     const lim = Math.floor(0x100000000 / n) * n, buf = new Uint32Array(1);
@@ -529,14 +501,13 @@ function randomSeed() { const a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let o = ''
 function cleanName(v, fb) { const t = String(v == null ? '' : v).replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, CFG.nameMax); return t || fb; }
 function cleanSeed(v) { return String(v == null ? '' : v).replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 12); }
 
-/* ---------- 4. STORAGE (versioned, sanitised, memory fallback) ---------- */
 const Store = (() => {
   let ok = true; const mem = {};
   try { const k = CFG.keyPrefix + '_t'; localStorage.setItem(k, '1'); localStorage.removeItem(k); } catch (e) { ok = false; }
   return {
     persistent: () => ok,
     get(key, fb) { try { const raw = ok ? localStorage.getItem(CFG.keyPrefix + key) : mem[key]; return raw == null ? fb : JSON.parse(raw); } catch (e) { return fb; } },
-    set(key, val) { try { const raw = JSON.stringify(val); if (ok) localStorage.setItem(CFG.keyPrefix + key, raw); else mem[key] = raw; } catch (e) { /* quota or privacy mode: ignore */ } },
+    set(key, val) { try { const raw = JSON.stringify(val); if (ok) localStorage.setItem(CFG.keyPrefix + key, raw); else mem[key] = raw; } catch (e) { /* quota/privacy */ } },
     del(key) { try { if (ok) localStorage.removeItem(CFG.keyPrefix + key); else delete mem[key]; } catch (e) { /* ignore */ } },
     wipe() { ['settings', 'profile', 'setup', 'match'].forEach(k => this.del(k)); }
   };
@@ -578,7 +549,6 @@ function sanitizeSetup(r) {
   return o;
 }
 
-/* ---------- 5. DATA ---------- */
 const SNAKE_COLORS = ['#d6336c', '#2f9e44', '#f08c00', '#7048e8'];
 const THEMES = {
   sunset: { name: 'Sunset Highway', tag: 'Desert road at golden hour', start: 'Dusty Diner', goal: 'Sunset Overlook', unlock: null, root: 0,
@@ -608,14 +578,12 @@ const THEMES = {
     parts: { col: '255,255,230', vy: -4, vx: 10, r: [1, 2], tw: true, a: .8 } }
 };
 const THEME_ORDER = ['sunset', 'park', 'neon', 'frost', 'coast'];
-// Pieces: unique shape + number + colour (never colour alone)
 const PIECES = [
   { name: 'Orange circle', glyph: '●', color: '#e8590c', ink: '#ffffff', d: 'M-24 0a24 24 0 1 0 48 0a24 24 0 1 0 -48 0Z', ty: 9 },
   { name: 'Blue square', glyph: '■', color: '#1c7ed6', ink: '#ffffff', d: 'M-22 -22H22V22H-22Z', ty: 9 },
   { name: 'Yellow triangle', glyph: '▲', color: '#fab005', ink: '#1b1b1b', d: 'M0 -29L30 23H-30Z', ty: 15 },
   { name: 'Green diamond', glyph: '◆', color: '#2f9e44', ink: '#ffffff', d: 'M0 -31L30 0L0 31L-30 0Z', ty: 9 }
 ];
-// Boards are pure data: { ladders:{bottom:top}, snakes:{head:tail} }
 const CLASSIC = { id: 'classic', name: 'Classic Route',
   ladders: { 3: 22, 8: 30, 20: 41, 28: 76, 37: 58, 51: 67, 63: 83, 71: 91 },
   snakes: { 32: 10, 48: 26, 62: 18, 74: 53, 88: 49, 93: 69, 96: 75, 99: 78 } };
@@ -627,7 +595,6 @@ function validateBoard(b) {
   for (const [a, c] of S) { if (a > 99 || c < 2 || c >= a || rowOf(a) <= rowOf(c) || seen.has(a) || seen.has(c)) return false; seen.add(a); seen.add(c); }
   return true;
 }
-/* Seeded, reproducible, balanced board generator for Wild Board mode. */
 function generateWild(seedStr) {
   const base = hashSeed(seedStr || 'WILD');
   for (let attempt = 0; attempt < 300; attempt++) {
@@ -670,13 +637,11 @@ function unlockText(id) {
   return u.type === 'matches' ? `Play ${plural(u.n, 'match', 'matches')} (${Math.min(profile.matches, u.n)}/${u.n})` : `Win ${plural(u.n, 'match', 'matches')} (${Math.min(profile.humanWins, u.n)}/${u.n})`;
 }
 
-/* ---------- 6. ENGINE (pure rules, no DOM) ---------- */
 const Dice = {
   forced: [],
   roll() { if (DEBUG && this.forced.length) return clamp(Math.floor(this.forced.shift()), 1, 6); return secureInt(6) + 1; }
 };
 const Engine = {
-  /* Resolve one roll for a piece on `pos`. Returns every fact the UI needs. */
   resolve(board, rules, pos, roll) {
     const FIN = CFG.size, out = { roll, from: pos, steps: [], blocked: false, bounced: false, landing: pos, special: null, final: pos, won: false, need: FIN - pos };
     if (pos + roll > FIN && rules.finish === 'exact') { out.blocked = true; return out; }
@@ -691,7 +656,6 @@ const Engine = {
   }
 };
 
-/* ---------- 7. SOUND (Web Audio, created lazily after a user gesture) ---------- */
 const Sound = (() => {
   let ctx = null, master, sfxG, musG, failed = false, musicTimer = 0, root = 0;
   const SCALE = [0, 2, 4, 7, 9, 12, 14];
@@ -754,40 +718,60 @@ const Sound = (() => {
   function stopMusic() { if (musicTimer) { clearInterval(musicTimer); musicTimer = 0; } }
   return {
     resume, apply, setRoot(n) { root = n; },
-    play(name, arg) { try { if (!ctx) return; const f = FX[name]; if (f) f(arg); } catch (e) { /* audio must never break gameplay */ } },
+    play(name, arg) { try { if (!ctx) return; const f = FX[name]; if (f) f(arg); } catch (e) { /* never break gameplay */ } },
     buzz(p) { try { if (settings.haptics && navigator.vibrate) navigator.vibrate(p); } catch (e) { /* unsupported */ } }
   };
 })();
 
-/* ---------- 8. SCOPE: cancellable tweens & timers. Cancelling a scope silently
-   drops every pending continuation, so stale callbacks can never mutate a newer match. ---------- */
+/* Fix #1/#2: Scope now rejects with CANCEL so awaiting code unwinds instantly. */
 class Scope {
   constructor() { this.jobs = new Set(); this.timers = new Set(); this.dead = false; }
   tween(ms, fn) {
-    return new Promise(resolve => {
-      if (this.dead) return;
-      const job = { id: 0 }; this.jobs.add(job);
+    return new Promise((resolve, reject) => {
+      if (this.dead) return reject(CANCEL);
+      const job = { id: 0 };
+      this.jobs.add(job);
       const t0 = performance.now();
       const step = now => {
+        if (this.dead) { this.jobs.delete(job); return reject(CANCEL); }
         const t = ms <= 0 ? 1 : clamp((now - t0) / ms, 0, 1);
-        fn(t);
-        if (t < 1) job.id = requestAnimationFrame(step); else { this.jobs.delete(job); resolve(); }
+        try { fn(t); } catch (e) { this.jobs.delete(job); return reject(e); }
+        if (t < 1) job.id = requestAnimationFrame(step);
+        else { this.jobs.delete(job); resolve(); }
       };
       job.id = requestAnimationFrame(step);
     });
   }
-  sleep(ms) { return new Promise(resolve => { this.after(ms, resolve); }); }
+  sleep(ms) {
+    return new Promise((resolve, reject) => {
+      if (this.dead) return reject(CANCEL);
+      const job = { id: 0, reject };
+      this.timers.add(job);
+      job.id = setTimeout(() => {
+        this.timers.delete(job);
+        if (this.dead) reject(CANCEL); else resolve();
+      }, Math.max(0, ms));
+    });
+  }
   after(ms, fn) {
     if (this.dead) return null;
-    const job = { id: 0 }; this.timers.add(job);
-    job.id = setTimeout(() => { this.timers.delete(job); if (!this.dead) fn(); }, Math.max(0, ms));
+    const job = { id: 0, reject: null };
+    this.timers.add(job);
+    job.id = setTimeout(() => {
+      this.timers.delete(job);
+      if (!this.dead) fn();
+    }, Math.max(0, ms));
     return job;
   }
-  clear(job) { if (job) { clearTimeout(job.id); this.timers.delete(job); } }
-  cancel() { this.dead = true; this.jobs.forEach(j => cancelAnimationFrame(j.id)); this.timers.forEach(j => clearTimeout(j.id)); this.jobs.clear(); this.timers.clear(); }
+  clear(job) { if (job && job.id) { clearTimeout(job.id); this.timers.delete(job); } }
+  cancel() {
+    this.dead = true;
+    this.jobs.forEach(j => { cancelAnimationFrame(j.id); });
+    this.timers.forEach(j => { clearTimeout(j.id); if (typeof j.reject === 'function') { try { j.reject(CANCEL); } catch (e) {} } });
+    this.jobs.clear(); this.timers.clear();
+  }
 }
 
-/* ---------- 9. SCENE: procedural themed background (cached bitmap + capped particles) ---------- */
 const Scene = (() => {
   const cv = q('#bg'), cx = cv.getContext('2d');
   let cache = null, W = 0, H = 0, dpr = 1, parts = [], raf = 0, last = 0, tid = 'sunset';
@@ -905,7 +889,6 @@ const Scene = (() => {
   return { setTheme(id) { if (THEMES[id] && (id !== tid || !cache)) { tid = id; build(); sync(); } }, sync };
 })();
 
-/* ---------- 10. CONFETTI (hard-capped, self-terminating) ---------- */
 const Confetti = (() => {
   const cv = q('#fx'), cx = cv.getContext('2d');
   let ps = [], raf = 0, W = 0, H = 0, dpr = 1, last = 0;
@@ -936,8 +919,6 @@ const Confetti = (() => {
   };
 })();
 
-/* ---------- 11. BOARD VIEW (SVG). Purely presentational: derives everything from logical tile numbers. ---------- */
-/* Serpentine mapping: tile 1 bottom-left, rows alternate direction, 100 top-left. */
 function tileXY(n) {
   const r = rowOf(n), c0 = (n - 1) % 10, col = r % 2 === 0 ? c0 : 9 - c0;
   return { x: GEO.m + col * GEO.t + GEO.t / 2, y: GEO.m + (9 - r) * GEO.t + GEO.t / 2 };
@@ -1046,7 +1027,7 @@ function createBoardView(svgEl, board, theme, scope) {
     if (reducedMotion() || ms <= 0) { place(p, tx, ty, SLOT_SCALE[1]); return scope.sleep(ms * 0.6); }
     return scope.tween(ms, t => { const e = easeIO(t); place(p, lerp(x0, tx, e), lerp(y0, ty, e) - Math.sin(Math.PI * t) * 18, lerp(s0, SLOT_SCALE[1], e)); });
   };
-  view.travel = (i, pts, ms, bulge) => {      // follow a polyline (ladder or snake body)
+  view.travel = (i, pts, ms, bulge) => {
     const p = pieces[i], ox = SLOT[1][0][0], oy = SLOT[1][0][1], cum = [0];
     for (let k = 1; k < pts.length; k++) cum.push(cum[k - 1] + Math.hypot(pts[k].x - pts[k - 1].x, pts[k].y - pts[k - 1].y));
     const total = cum[cum.length - 1] || 1, last = pts[pts.length - 1];
@@ -1083,24 +1064,26 @@ function createBoardView(svgEl, board, theme, scope) {
   return view;
 }
 
-/* Title-screen demo: two pieces play endlessly on the Classic board using the real engine. */
 const Preview = (() => {
   let scope = null;
   async function run(sc, v) {
     const pos = [1, 1]; let who = 0;
-    while (!sc.dead) {
-      await sc.sleep(850);
-      const res = Engine.resolve(CLASSIC, { finish: 'exact' }, pos[who], secureInt(6) + 1);
-      v.setActive(who);
-      if (!res.blocked) {
-        for (const t of res.steps) await v.hopTo(who, t, v.dur(CFG.anim.hopMs));
-        pos[who] = res.landing;
-        if (res.special) { await sc.sleep(220); v.focus(res.special); await v.travel(who, v.paths[res.special.type][res.special.from].pts, v.dur(res.special.type === 'ladder' ? 800 : 950), res.special.type === 'ladder' ? 0.2 : 0); pos[who] = res.special.to; v.focus(null); }
-        await v.layout(pos, true);
+    try {
+      while (!sc.dead) {
+        await sc.sleep(850);
+        // Fix #16: use Dice.roll so debug helpers work in preview too
+        const res = Engine.resolve(CLASSIC, { finish: 'exact' }, pos[who], Dice.roll());
+        v.setActive(who);
+        if (!res.blocked) {
+          for (const t of res.steps) await v.hopTo(who, t, v.dur(CFG.anim.hopMs));
+          pos[who] = res.landing;
+          if (res.special) { await sc.sleep(220); v.focus(res.special); await v.travel(who, v.paths[res.special.type][res.special.from].pts, v.dur(res.special.type === 'ladder' ? 800 : 950), res.special.type === 'ladder' ? 0.2 : 0); pos[who] = res.special.to; v.focus(null); }
+          await v.layout(pos, true);
+        }
+        if (pos[who] >= CFG.size) { await sc.sleep(900); pos[0] = pos[1] = 1; await v.layout(pos, true); }
+        who = 1 - who;
       }
-      if (pos[who] >= CFG.size) { await sc.sleep(900); pos[0] = pos[1] = 1; await v.layout(pos, true); }
-      who = 1 - who;
-    }
+    } catch (e) { if (e !== CANCEL) console.error(e); }
   }
   return {
     stop() { if (scope) { scope.cancel(); scope = null; } },
@@ -1114,13 +1097,10 @@ const Preview = (() => {
   };
 })();
 
-/* ---------- 12. MATCH CONTROLLER ----------
-   Phases: ready → rolling → moving → special → turnEnd → ready … → victory.
-   Phase is set synchronously before the first await, so rapid clicks can never double-roll.
-   Every match owns a Scope; replacing/cancelling a match drops all of its pending callbacks. */
-let SU = sanitizeSetup(Store.get('setup', null));   // setup screen state (persisted)
-let M = null;                                        // current match
+let SU = sanitizeSetup(Store.get('setup', null));
+let M = null;
 let bannerT = 0, turnBannerT = 0;
+let sliderSaveT = 0;   // Fix #12: debounce slider saveSettings
 const ACH = [
   { id: 'first', name: 'Hit the Road', desc: 'Finish your first match.' },
   { id: 'sky', name: 'Sky High', desc: 'Climb a ladder of 40+ tiles.' },
@@ -1141,7 +1121,8 @@ const dialogOpen = () => !!q('dialog[open]');
 function openDialog(d) { if (d.open) return; try { d.showModal(); } catch (e) { d.setAttribute('open', ''); } }
 function closeDialog(d) { if (d.open) { try { d.close(); } catch (e) { d.removeAttribute('open'); } d.dispatchEvent(new Event('close')); } }
 function closeAllDialogs() { qa('dialog[open]').forEach(closeDialog); }
-function announce(t) { const el = q('#live'); el.textContent = ''; setTimeout(() => { el.textContent = t; }, 40); }
+let announceT = 0;   // Fix #11: cancel race
+function announce(t) { const el = q('#live'); clearTimeout(announceT); el.textContent = ''; announceT = setTimeout(() => { el.textContent = t; }, 60); }
 function toast(title, sub) {
   const host = q('#toasts'); while (host.children.length >= 3) host.firstChild.remove();
   const el = h('div', { class: 'toast' }, h('b', { text: title }), sub ? h('small', { text: sub }) : null); host.append(el);
@@ -1159,7 +1140,6 @@ function applyTheme(id) {
   Scene.setTheme(id); Sound.setRoot(th.root);
 }
 
-/* --- dice widget --- */
 const FACES = { 0: [], 1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8] };
 function buildDie() { const d = q('#die'); d.replaceChildren(...Array.from({ length: 9 }, () => h('i'))); setDie(0); }
 function setDie(v) { const on = FACES[v] || []; qa('#die i').forEach((p, k) => { p.classList.toggle('on', on.includes(k)); p.style.opacity = v === 0 ? '.14' : ''; p.style.transform = v === 0 ? 'none' : ''; }); }
@@ -1176,7 +1156,6 @@ async function animateDie(m, roll) {
   await m.scope.sleep(dur(m, 180));
 }
 
-/* --- messaging, log, banners --- */
 function setMsg(t) { q('#msg').textContent = t; }
 function say(m, pl, text, o) {
   o = o || {}; setMsg(text);
@@ -1201,7 +1180,6 @@ function showTurnBanner(pl) {
 }
 function screenPos(tile) { const r = q('#board-svg').getBoundingClientRect(), c = tileXY(tile); return { x: r.left + c.x / GEO.vb * r.width, y: r.top + c.y / GEO.vb * r.height }; }
 
-/* --- HUD sync (model → DOM) --- */
 function buildCards(m) {
   const host = q('#players'); host.replaceChildren(); m.cards = [];
   m.players.forEach(p => {
@@ -1231,9 +1209,11 @@ function updateControls(m) {
   const b = q('#btn-roll'), pl = m.players[m.current]; let label, on = false;
   if (m.phase === 'victory') { label = STR.roll.again; on = true; }
   else if (m.phase === 'ready') { if (pl.type === 'human') { label = STR.roll.ready; on = true; } else label = STR.roll.cpu(pl.name); }
-  else label = m.phase === 'rolling' ? STR.roll.rolling : STR.roll.moving;
+  else if (m.phase === 'rolling') label = STR.roll.rolling;
+  else if (m.phase === 'special') label = STR.roll.special;
+  else if (m.phase === 'turnEnd') label = STR.roll.waiting;
+  else label = STR.roll.moving;
   b.textContent = label; b.setAttribute('aria-disabled', on ? 'false' : 'true'); b.classList.toggle('ready-pulse', on && m.phase === 'ready');
-  document.body.dataset.phase = m.phase;
   const who = q('#who'), shown = m.winner || pl;
   who.replaceChildren(pieceIcon(shown.piece, 30), h('span', { class: 'nm', text: m.winner ? `${shown.name} won!` : shown.name }));
 }
@@ -1241,14 +1221,18 @@ function soundIcon(on) {
   return s('svg', { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 2.2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true' },
     s('path', { d: 'M4 9v6h4l5 4V5L8 9H4z', fill: 'currentColor' }), on ? s('path', { d: 'M16.5 8.5c1.6 1.8 1.6 5.2 0 7M19 6c3 3.2 3 8.8 0 12' }) : s('path', { d: 'M17 9l5 6M22 9l-5 6' }));
 }
-function updateSoundBtn() { const b = q('#g-sound'); b.replaceChildren(soundIcon(settings.sfx)); b.setAttribute('aria-pressed', String(settings.sfx)); }
+function updateSoundBtn() {
+  const b = q('#g-sound');
+  b.replaceChildren(soundIcon(settings.sfx));
+  b.setAttribute('aria-pressed', String(settings.sfx));
+  b.setAttribute('aria-label', settings.sfx ? 'Mute sound effects (M)' : 'Unmute sound effects (M)');
+}
 function updateAll(m) {
   updateHeader(m); updateCards(m); updateControls(m); updateSoundBtn();
   q('#board-svg').setAttribute('aria-label', 'Board, tiles 1 to 100. ' + m.players.map(p => `${p.name} on tile ${p.pos}`).join(', ') + '.');
 }
 function tilesOf(m) { return m.players.map(p => p.pos); }
 
-/* --- lifecycle --- */
 function buildCfg(su) {
   const count = clamp(su.count, CFG.minPlayers, CFG.maxPlayers);
   return { mode: su.mode, theme: isUnlocked(su.theme) ? su.theme : 'sunset', finish: su.finish, bonusSix: su.bonusSix, randomOrder: su.randomOrder, count,
@@ -1297,14 +1281,14 @@ function beginTurnUI(m, showBanner) {
   if (showBanner && m.players.length > 1) showTurnBanner(pl);
 }
 function clearAI(m) { if (m.aiJob) { m.scope.clear(m.aiJob); m.aiJob = null; } m.aiWaiting = false; }
-function maybeAI(m) {            // computers use the same fair dice; only their pacing differs
+function maybeAI(m) {
   if (M !== m || m.phase !== 'ready' || m.aiJob) return;
   if (m.players[m.current].type !== 'computer') return;
   m.aiJob = m.scope.after(dur(m, CFG.anim.thinkMs) + secureInt(260), () => { m.aiJob = null; if (dialogOpen()) { m.aiWaiting = true; return; } takeTurn(); });
 }
 function onRollRequest() {
   const m = M; if (!m) return;
-  if (m.phase === 'victory') { Sound.resume(); Sound.play('click'); startMatch(m.cfg); return; }
+  if (m.phase === 'victory') { Sound.resume(); Sound.play('roll'); startMatch(m.cfg); return; }
   if (m.phase !== 'ready') return;
   if (m.players[m.current].type !== 'human') { Sound.resume(); Sound.play('error'); return; }
   takeTurn();
@@ -1312,14 +1296,15 @@ function onRollRequest() {
 function takeTurn() {
   const m = M;
   if (!m || m.phase !== 'ready' || dialogOpen()) return;
-  return runTurn(m).catch(err => {            // never leave the game stuck in a non-ready phase
+  return runTurn(m).catch(err => {
+    if (err === CANCEL) return;   // Fix #1/#2: silently drop cancelled matches
     console.error(err);
     if (M === m && m.phase !== 'victory') { m.view.focus(null); m.view.setTarget(null); m.view.layout(tilesOf(m), false); m.phase = 'ready'; m.aiJob = null; updateAll(m); maybeAI(m); }
   });
 }
 async function runTurn(m) {
   const pl = m.players[m.current];
-  m.phase = 'rolling'; clearAI(m); updateControls(m);          // synchronous lock
+  m.phase = 'rolling'; clearAI(m); updateControls(m);
   Sound.resume(); Sound.play('roll');
   const roll = Dice.roll();
   await animateDie(m, roll);
@@ -1335,7 +1320,13 @@ async function playResolution(m, pl, res) {
   }
   m.phase = 'moving'; updateControls(m); setMsg(rolledTxt); v.setTarget(res.landing);
   const hop = res.steps.length >= 5 ? CFG.anim.hopMs * 0.8 : CFG.anim.hopMs;
-  for (let k = 0; k < res.steps.length; k++) { Sound.play('step', k); await v.hopTo(i, res.steps[k], dur(m, hop)); }
+  for (let k = 0; k < res.steps.length; k++) {
+    Sound.play('step', k);
+    await v.hopTo(i, res.steps[k], dur(m, hop));
+    // Fix #6: HUD advances during hops so the tile number is never stale
+    const card = m.cards[i];
+    if (card) { card.pos.textContent = res.steps[k]; card.fill.style.width = clamp((res.steps[k] - 1) / 99 * 100, 1, 100) + '%'; }
+  }
   pl.pos = res.landing; v.setTarget(null); updateCards(m);
   if (res.bounced) { pl.stats.bounces++; banner('info', STR.banner.bounce); }
   if (!res.special) {
@@ -1346,7 +1337,9 @@ async function playResolution(m, pl, res) {
   }
   const sp = res.special, diff = Math.abs(sp.to - sp.from), isL = sp.type === 'ladder';
   m.phase = 'special'; updateControls(m); v.focus(sp);
-  say(m, pl, `${rolledTxt} ${isL ? STR.ladder(pl.name, sp.from, sp.to) : STR.snake(pl.name, sp.from, sp.to)}`);
+  // Fix #8: combine bounce + special message so bounce is never lost
+  const bounceTxt = res.bounced ? STR.bounce(pl.name, res.landing) + ' ' : '';
+  say(m, pl, `${rolledTxt} ${bounceTxt}${isL ? STR.ladder(pl.name, sp.from, sp.to) : STR.snake(pl.name, sp.from, sp.to)}`);
   banner(isL ? 'up' : 'down', isL ? STR.banner.ladder(diff) : STR.banner.snake(diff));
   await sc.sleep(dur(m, 380));
   const human = pl.type === 'human';
@@ -1359,7 +1352,7 @@ async function playResolution(m, pl, res) {
     Sound.play('snake'); Sound.buzz(70);
     await v.travel(i, v.paths.snake[sp.from].pts, dur(m, CFG.anim.snakeMs), -0.12);
   }
-  pl.pos = sp.to; v.focus(null);
+  pl.pos = sp.to; v.focus(null); updateCards(m);   // Fix #6: sync HUD right after special resolves
   const c = v.tileCenter(sp.to); v.burst(c.x, c.y, isL ? '#48d597' : '#ff6b6b', isL ? 18 : 12); v.floatText(c.x, c.y - 30, (isL ? '+' : '−') + diff, isL ? '#8bf5b9' : '#ffb3b3');
   if (isL && diff >= CFG.bigJump) { const sp2 = screenPos(sp.to); Confetti.burst(36, sp2.x, sp2.y, 3.6, 480); }
   await v.layout(tilesOf(m), true); updateAll(m);
@@ -1429,16 +1422,22 @@ function showSummary(m, info) {
     counts.map((c, k) => h('div', {}, h('span', { text: String(c) }), h('i', { style: `height:${Math.max(4, c / mx * 48)}px` }), h('span', { text: String(k + 1) }))))));
   if (info.ach.length) body.append(h('div', {}, h('h3', { text: 'Badges unlocked' }), h('ul', { class: 'bul' }, info.ach.map(id => { const a = ACH.find(x => x.id === id); return h('li', {}, h('b', { text: a.name + ' — ' }), a.desc); }))));
   if (info.unlocked.length) body.append(h('div', {}, h('h3', { text: 'New worlds unlocked' }), h('ul', { class: 'bul' }, info.unlocked.map(id => h('li', {}, h('b', { text: THEMES[id].name }), ' — ' + THEMES[id].tag)))));
-  const d = q('#d-summary'), rem = h('button', { class: 'btn primary big', onclick: () => { closeDialog(d); startMatch(m.cfg); } }, '↻ Rematch');
+  const d = q('#d-summary'), rem = h('button', { class: 'btn primary big', onclick: () => {
+    closeDialog(d);
+    // Fix #7: Wild Board rematch gets a fresh seed (its whole point is randomness)
+    const cfg = { ...m.cfg }; if (cfg.mode === 'wild') cfg.seed = randomSeed();
+    startMatch(cfg);
+  } }, '↻ Rematch');
   body.append(h('div', { class: 'dlg-actions' }, rem, h('button', { class: 'btn', onclick: () => { closeDialog(d); leaveMatch(); showScreen('setup'); renderSetup(); } }, 'Change setup'), h('button', { class: 'btn', onclick: () => { closeDialog(d); leaveMatch(); showScreen('title'); } }, 'Main menu')));
   openDialog(d); rem.focus();
 }
-function leaveMatch() { if (M) { M.scope.cancel(); M = null; } Confetti.clear(); Coach.hide(); document.body.dataset.phase = ''; }
+function leaveMatch() { if (M) { M.scope.cancel(); M = null; } Confetti.clear(); Coach.hide(); }
 
-/* --- persistence of an in-progress match --- */
 function saveMatch(m) {
   if (m.phase === 'victory') return;
-  Store.set('match', { v: 1, cfg: m.cfg, players: m.players.map(p => ({ piece: p.piece, name: p.name, type: p.type, pos: p.pos, stats: p.stats })),
+  // Fix #18: strip cfg.players (redundant with the top-level players array)
+  const cfg = { ...m.cfg }; delete cfg.players;
+  Store.set('match', { v: 1, cfg, players: m.players.map(p => ({ piece: p.piece, name: p.name, type: p.type, pos: p.pos, stats: p.stats })),
     current: m.current, rollCount: m.rollCount, bonusChain: m.bonusChain, rolls: m.rolls.slice(-600), log: m.log.slice(-CFG.logMax), elapsed: elapsed(m) });
 }
 function loadSavedMatch() {
@@ -1463,7 +1462,6 @@ function loadSavedMatch() {
   } catch (e) { return null; }
 }
 
-/* --- first-match coach (non-blocking, skippable) --- */
 const Coach = {
   step: 0, on: false, spot: null,
   start() { this.step = 0; this.on = true; this.render(); },
@@ -1481,7 +1479,6 @@ const Coach = {
   }
 };
 
-/* ---------- 13. UI: screens, setup, dialogs ---------- */
 let curScreen = 'title';
 const saveSetup = () => Store.set('setup', SU);
 function validTheme() { if (!isUnlocked(SU.theme)) SU.theme = 'sunset'; return SU.theme; }
@@ -1499,10 +1496,11 @@ function keepFocus(fn) {
   const a = document.activeElement, k = a && a.dataset ? a.dataset.k : null; fn();
   if (k) { const el = q('[data-k="' + k + '"]'); if (el) el.focus({ preventScroll: true }); }
 }
+// Fix #5: seg no longer plays click sound (global handler does it)
 function seg(options, value, onChange, label, key) {
   const wrap = h('div', { class: 'seg', role: 'group', 'aria-label': label });
   const btns = options.map(o => h('button', { type: 'button', 'data-k': key + ':' + o.value, 'aria-pressed': String(o.value === value), onclick: () => {
-    value = o.value; btns.forEach((b, k) => b.setAttribute('aria-pressed', String(options[k].value === value))); Sound.resume(); Sound.play('click'); onChange(value);
+    value = o.value; btns.forEach((b, k) => b.setAttribute('aria-pressed', String(options[k].value === value))); onChange(value);
   } }, o.label));
   wrap.append(...btns); return wrap;
 }
@@ -1516,7 +1514,7 @@ function confirmBtn(label, confirmLabel, action, cls) {
 }
 function renderModes() {
   q('#su-modes').replaceChildren(...['classic', 'quick', 'wild'].map(id => h('button', { type: 'button', class: 'card', 'data-k': 'mode:' + id, 'aria-pressed': String(SU.mode === id), onclick: () => {
-    SU.mode = id; saveSetup(); Sound.resume(); Sound.play('click'); keepFocus(() => { renderModes(); renderSeed(); renderPreview(); });
+    SU.mode = id; saveSetup(); keepFocus(() => { renderModes(); renderSeed(); renderPreview(); });
   } }, h('b', { text: STR.modes[id].name }), h('small', { text: STR.modes[id].desc }))));
 }
 function renderSeed() { q('#su-seed-row').hidden = SU.mode !== 'wild'; const i = q('#su-seed'); if (i.value !== SU.seed) i.value = SU.seed; }
@@ -1538,7 +1536,7 @@ function renderThemes() {
     const th = THEMES[id], un = isUnlocked(id);
     return h('button', { type: 'button', class: 'card', 'data-k': 'theme:' + id, 'aria-pressed': String(SU.theme === id), 'aria-disabled': String(!un), onclick: () => {
       if (!isUnlocked(id)) { Sound.resume(); Sound.play('error'); toast('Locked world', `${th.name}: ${unlockText(id)}`); return; }
-      SU.theme = id; saveSetup(); applyTheme(id); Sound.resume(); Sound.play('click'); keepFocus(() => { renderThemes(); renderPreview(); });
+      SU.theme = id; saveSetup(); applyTheme(id); keepFocus(() => { renderThemes(); renderPreview(); });
     } }, h('div', { class: 'swatch', style: 'background:linear-gradient(90deg,' + th.sky.map(x => x[1]).join(',') + ')' }), h('b', { text: th.name }), h('small', { text: th.tag }), un ? null : h('span', { class: 'lock', text: '🔒 ' + unlockText(id) }));
   }));
 }
@@ -1564,13 +1562,19 @@ function startQuick() {
   Sound.resume(); startMatch(buildCfg(su));
 }
 
-/* --- pause, settings, stats dialogs --- */
+// Fix #3: pause freezes timer + stops AI + guarded against mid-animation
 function openPause() {
-  if (!M) return;
-  const d = q('#d-pause'), a = q('#pause-actions');
+  if (!M || M.phase === 'victory') return;
+  if (M.phase !== 'ready' && M.phase !== 'turnEnd') {
+    Sound.resume(); Sound.play('error');
+    return;
+  }
+  M.elapsedBase += performance.now() - M.seg; M.frozen = true;
+  clearAI(M);
+  const d = q('#d-pause'), a = q('#pause-actions'), m = M;
   a.replaceChildren(
     h('button', { class: 'btn primary', onclick: () => closeDialog(d) }, '▶ Resume'),
-    confirmBtn('↻ Restart match', 'Tap again to restart', () => { closeDialog(d); startMatch(M.cfg); }),
+    confirmBtn('↻ Restart match', 'Tap again to restart', () => { closeDialog(d); if (M === m) startMatch(m.cfg); }),
     h('button', { class: 'btn', onclick: () => openDialog(q('#d-rules')) }, 'How to play'),
     h('button', { class: 'btn', onclick: () => { renderSettings(); openDialog(q('#d-settings')); } }, 'Settings'),
     h('button', { class: 'btn', onclick: () => { closeDialog(d); leaveMatch(); showScreen('title'); } }, 'Quit to title'));
@@ -1585,7 +1589,10 @@ function renderSettings() {
   const b = q('#settings-body'); b.replaceChildren();
   const row = (label, sub, control) => h('div', { class: 'setrow' }, h('div', {}, h('span', { class: 'lab', text: label }), sub ? h('small', { text: sub }) : null), control);
   const onoff = (key, label, after) => seg([{ value: true, label: 'On' }, { value: false, label: 'Off' }], settings[key], v => { settings[key] = v; saveSettings(); applySettings(); if (after) after(); }, label, 's-' + key);
-  const slider = (key, label) => h('input', { type: 'range', min: 0, max: 100, value: Math.round(settings[key] * 100), 'aria-label': label, oninput: e => { settings[key] = clamp(+e.target.value / 100, 0, 1); saveSettings(); Sound.apply(); }, onchange: () => { Sound.resume(); Sound.play('ladder'); } });
+  // Fix #12: debounce slider saves (was hitting localStorage 50+ times per drag)
+  const slider = (key, label) => h('input', { type: 'range', min: 0, max: 100, value: Math.round(settings[key] * 100), 'aria-label': label,
+    oninput: e => { settings[key] = clamp(+e.target.value / 100, 0, 1); Sound.apply(); clearTimeout(sliderSaveT); sliderSaveT = setTimeout(saveSettings, 250); },
+    onchange: () => { clearTimeout(sliderSaveT); saveSettings(); Sound.resume(); Sound.play('ladder'); } });
   const items = [
     row('Sound effects', 'Dice, hops, ladders, snakes and fanfares', onoff('sfx', 'Sound effects', () => Sound.resume())),
     row('Effects volume', null, slider('sfxVol', 'Effects volume')),
@@ -1630,7 +1637,6 @@ function renderStats() {
   }
 }
 
-/* ---------- 14. BOOT & INPUT ---------- */
 function onDialogClose() { if (!dialogOpen() && M) { M.aiWaiting = false; maybeAI(M); } }
 function wire() {
   q('#btn-play').addEventListener('click', () => { showScreen('setup'); renderSetup(); });
@@ -1641,19 +1647,38 @@ function wire() {
   q('#btn-settings').addEventListener('click', () => { renderSettings(); openDialog(q('#d-settings')); });
   q('#setup-back').addEventListener('click', () => showScreen('title'));
   q('#su-start').addEventListener('click', startFromSetup);
-  q('#su-seed').addEventListener('input', e => { SU.seed = cleanSeed(e.target.value); if (e.target.value !== SU.seed) e.target.value = SU.seed; saveSetup(); });
+  // Fix #13: clean seed only on blur so cursor stays put during typing
+  q('#su-seed').addEventListener('input', e => { SU.seed = cleanSeed(e.target.value); saveSetup(); });
+  q('#su-seed').addEventListener('blur', e => { e.target.value = SU.seed; });
   q('#g-menu').addEventListener('click', openPause);
   q('#g-settings').addEventListener('click', () => { renderSettings(); openDialog(q('#d-settings')); });
-  q('#g-sound').addEventListener('click', () => { settings.sfx = !settings.sfx; saveSettings(); applySettings(); Sound.resume(); Sound.play('click'); });
+  // Fix #5: play click before toggling state, so it isn't muted mid-toggle
+  q('#g-sound').addEventListener('click', () => { Sound.resume(); Sound.play('click'); settings.sfx = !settings.sfx; saveSettings(); applySettings(); });
   q('#btn-roll').addEventListener('click', onRollRequest);
   q('#die').addEventListener('click', onRollRequest);
-  qa('dialog').forEach(d => { d.addEventListener('close', onDialogClose); d.addEventListener('click', e => { if (e.target === d) closeDialog(d); }); });
+  qa('dialog').forEach(d => {
+    d.addEventListener('close', onDialogClose);
+    d.addEventListener('click', e => { if (e.target === d) closeDialog(d); });
+  });
+  // Pause-specific unpause logic
+  q('#d-pause').addEventListener('close', () => {
+    if (M && M.frozen && M.phase !== 'victory') { M.seg = performance.now(); M.frozen = false; }
+    if (M) maybeAI(M);
+  });
+  // Fix #4/#5: centralised click sound (no more double-play, no more muted toggles)
   document.addEventListener('click', e => {
-    const c = e.target.closest ? e.target.closest('[data-close]') : null; if (c) closeDialog(c.closest('dialog'));
-    if (e.target.closest && e.target.closest('.btn') && !e.target.closest('#btn-roll')) { Sound.resume(); Sound.play('click'); }
+    const t = e.target;
+    if (!t || !t.closest) return;
+    const dlgt = t.closest('[data-close]');
+    if (dlgt) { const dlg = dlgt.closest('dialog'); if (dlg) closeDialog(dlg); }
+    const btn = t.closest('.btn, .seg button, .card, [role="tab"]');
+    if (!btn) return;
+    if (btn.closest('#btn-roll') || btn.closest('#die') || btn.closest('#g-sound')) return;
+    Sound.resume(); Sound.play('click');
   });
   const unlockAudio = () => Sound.resume();
-  document.addEventListener('pointerdown', unlockAudio, { once: true }); document.addEventListener('keydown', unlockAudio, { once: true });
+  document.addEventListener('pointerdown', unlockAudio, { once: true });
+  document.addEventListener('keydown', unlockAudio, { once: true });
   document.addEventListener('keydown', e => {
     if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || curScreen !== 'game' || !M || dialogOpen()) return;
     const tag = (e.target.tagName || '').toLowerCase(), field = tag === 'input' || tag === 'textarea' || tag === 'select', key = e.key.toLowerCase();
@@ -1677,7 +1702,6 @@ catch (err) {
   console.error(err);
   document.body.append(h('p', { style: 'position:fixed;inset:auto 12px 12px;z-index:300;background:#10141f;color:#fff;padding:12px;border-radius:12px', text: 'Something went wrong while starting the game. Please reload the page.' }));
 }
-
 </script>
 </body>
 </html>
