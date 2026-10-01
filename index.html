@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Snakes &amp; Ladders — Coast to Coast</title>
+<meta name="description" content="Snakes &amp; Ladders: Coast to Coast — a premium, original, family-friendly digital board game with American-inspired worlds. Single file, offline, no account.">
+<meta name="theme-color" content="#1b1040">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b1040'/%3E%3Cpath d='M18 50V14M34 50V14M18 22h16M18 32h16M18 42h16' stroke='%23ffb347' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M42 12c10 8-8 14 2 22s-6 14-2 18' stroke='%2348d597' stroke-width='6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+/* ==========================================================================
+   DESIGN SYSTEM — theme variables are overwritten at runtime by THEMES[id].vars
+   ========================================================================== */
+:root{
+  --bg-top:#1b1040;--bg-mid:#7a1d5c;--bg-bot:#f2713b;
+  --accent:#ffb347;--accent2:#ff5d73;--accent-ink:#2a1200;
+  --panel:rgba(26,12,38,.78);--panel-bd:rgba(255,255,255,.16);
+  --ink:#fff4e6;--ink-dim:#e6d3c4;
+  --frame:#3b1030;--frame2:#5a1f48;
+  --tileA:#fff1dc;--tileB:#ffd9a8;--tileText:#4a1f0a;--tileHalo:#fff7ea;--tileStroke:rgba(74,31,10,.28);
+  --startFill:#c7f0c8;--finFill:#ffe27a;
+  --hintUp:#0b6b2e;--hintDown:#b3122f;
+  --dlg1:#2c1744;--dlg2:#1a1030;
+  --r:18px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html{font-size:100%;-webkit-text-size-adjust:100%}
+html.large{font-size:118%}
+body{margin:0;min-height:100vh;min-height:100dvh;background:var(--bg-bot);color:var(--ink);
+  font-family:"Avenir Next","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.35;overflow-x:hidden}
+h1,h2,h3,h4,p,ol,ul{margin:0}
+ol,ul{padding:0;list-style:none}
+button,input,select{font:inherit;color:inherit}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:90;pointer-events:none}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.screen{position:relative;z-index:1;min-height:100vh;min-height:100dvh;display:none}
+.screen.active{display:flex;flex-direction:column;animation:screenIn .45s ease both}
+@keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+:focus-visible{outline:3px solid #fff;outline-offset:3px;border-radius:10px}
+h2:focus,h1:focus{outline:none}
+
+/* ---------- Buttons ---------- */
+.btn{appearance:none;border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  min-height:44px;padding:.55rem 1.1rem;border-radius:14px;font-weight:800;letter-spacing:.02em;color:var(--ink);
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.08));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.24),0 4px 0 rgba(0,0,0,.38);
+  transition:transform .08s,box-shadow .08s,filter .15s;user-select:none;text-align:center}
+.btn:hover{filter:brightness(1.14)}
+.btn:active{transform:translateY(3px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.24),0 1px 0 rgba(0,0,0,.38)}
+.btn.primary{color:var(--accent-ink);background:var(--accent);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 62%,#fff),var(--accent));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.5),0 4px 0 color-mix(in srgb,var(--accent) 40%,#000)}
+.btn.primary:active{box-shadow:inset 0 0 0 1px rgba(255,255,255,.5),0 1px 0 color-mix(in srgb,var(--accent) 40%,#000)}
+.btn.danger{background:linear-gradient(180deg,#ff7b7b,#d63a4a);color:#fff}
+.btn.big{min-height:58px;font-size:1.12rem;padding:.7rem 1.6rem;border-radius:18px}
+.btn.sm{min-height:40px;padding:.35rem .8rem;font-size:.9rem}
+.btn.icon{width:44px;padding:0}
+.btn[aria-disabled="true"]{opacity:.55;cursor:not-allowed;filter:saturate(.55);transform:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 4px 0 rgba(0,0,0,.3)}
+.btn svg{width:22px;height:22px;flex:none}
+.panel{background:var(--panel);border:1px solid var(--panel-bd);border-radius:var(--r);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.28)}
+
+/* ---------- Title screen ---------- */
+.title-wrap{margin:auto;display:flex;flex-wrap:wrap;gap:clamp(20px,4vw,56px);align-items:center;justify-content:center;
+  padding:clamp(16px,3vw,40px);max-width:1180px;width:100%}
+.title-copy{flex:1 1 360px;max-width:520px;display:flex;flex-direction:column;gap:14px}
+.eyebrow{letter-spacing:.26em;text-transform:uppercase;font-size:.76rem;font-weight:800;color:var(--accent)}
+.logo{display:flex;flex-direction:column;line-height:.92;font-size:clamp(2.8rem,9vw,5.4rem);font-weight:900;text-transform:uppercase;
+  font-family:"Arial Black","Avenir Next Heavy",Impact,sans-serif;text-shadow:0 4px 0 rgba(0,0,0,.38),0 14px 30px rgba(0,0,0,.35)}
+.logo .amp{color:var(--accent);font-size:.5em;line-height:1.1}
+.logo .l2{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;
+  filter:drop-shadow(0 4px 0 rgba(0,0,0,.38))}
+.tagline{font-size:1.05rem;color:var(--ink);max-width:46ch;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.menu-btns{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.fine{font-size:.8rem;color:var(--ink-dim);opacity:.9}
+.title-board{flex:1 1 320px;max-width:min(520px,88vw);aspect-ratio:1;border-radius:3.4%;box-shadow:0 24px 60px rgba(0,0,0,.5);
+  transform:rotate(-1.6deg);animation:floaty 7s ease-in-out infinite}
+.title-board svg{width:100%;height:100%;display:block}
+@keyframes floaty{0%,100%{transform:rotate(-1.6deg) translateY(0)}50%{transform:rotate(-1deg) translateY(-8px)}}
+
+/* ---------- Setup screen ---------- */
+.setup-wrap{margin:16px auto;width:min(1020px,calc(100% - 24px));padding:clamp(14px,2.4vw,26px);display:flex;flex-direction:column;gap:18px}
+.setup-head{display:flex;align-items:center;gap:12px}
+.setup-head h2{font-size:clamp(1.3rem,3vw,1.8rem);font-weight:900}
+.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:780px){.setup-grid{grid-template-columns:1fr}}
+.setup-grid h3{font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.cards{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.card{position:relative;text-align:left;border-radius:14px;padding:12px 12px 12px;background:rgba(255,255,255,.07);border:2px solid transparent;
+  cursor:pointer;display:flex;flex-direction:column;gap:4px;min-height:44px;transition:background .15s,transform .1s}
+.card:hover{background:rgba(255,255,255,.13)}
+.card:active{transform:scale(.98)}
+.card[aria-pressed="true"]{border-color:var(--accent);background:rgba(255,255,255,.17)}
+.card[aria-pressed="true"]::after{content:"✓";position:absolute;top:8px;right:10px;font-weight:900;color:var(--accent)}
+.card[aria-disabled="true"]{opacity:.62;cursor:not-allowed}
+.card b{font-size:1rem;padding-right:1.2rem}
+.card small{color:var(--ink-dim);font-size:.8rem;line-height:1.3}
+.swatch{height:34px;border-radius:9px;margin-bottom:4px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
+.lock{font-size:.76rem;font-weight:800;color:var(--accent)}
+.seg{display:inline-flex;border-radius:12px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(255,255,255,.22);flex-wrap:nowrap}
+.seg button{border:0;background:transparent;min-height:44px;padding:0 .9rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.seg button:hover{background:rgba(255,255,255,.1)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.seg button[aria-pressed="true"]::before{content:"✓ ";font-weight:900}
+.prow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin-top:10px}
+.prow input,.field input{min-height:44px;border-radius:12px;border:2px solid rgba(255,255,255,.26);background:rgba(0,0,0,.3);color:var(--ink);padding:0 .8rem;width:100%}
+.prow input::placeholder,.field input::placeholder{color:var(--ink-dim);opacity:.7}
+.field{display:flex;flex-direction:column;gap:6px;margin-top:10px;font-size:.85rem;color:var(--ink-dim)}
+.rule{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.rule label,.rule .lab{font-weight:800}
+.rule p{font-size:.82rem;color:var(--ink-dim)}
+.preview-line{margin-top:6px;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.25);font-size:.88rem}
+.setup-foot{display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap}
+
+/* ---------- Game screen ---------- */
+.topbar{display:flex;align-items:center;gap:8px;padding:8px 12px calc(4px);min-height:56px}
+.route{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.15}
+.route strong{font-size:.98rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.route span{font-size:.78rem;color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.game-main{flex:1;display:grid;grid-template-columns:auto minmax(300px,380px);gap:16px;justify-content:center;align-items:start;padding:4px 12px 14px}
+.board-wrap{position:relative;width:min(calc(100vh - 88px),calc(100vw - 430px));width:min(calc(100dvh - 88px),calc(100vw - 430px));min-width:260px;aspect-ratio:1;
+  border-radius:3.4%;box-shadow:0 22px 50px rgba(0,0,0,.5)}
+#board-svg{width:100%;height:100%;display:block;touch-action:manipulation}
+.side{display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 88px);max-height:calc(100dvh - 88px);overflow:auto;padding:2px 2px 6px;scrollbar-width:thin}
+@media(max-aspect-ratio:1/1),(max-width:640px){
+  .game-main{grid-template-columns:1fr;justify-items:center;gap:12px}
+  .board-wrap{width:min(calc(100vw - 16px),calc(100dvh - 120px));min-width:min(300px,calc(100vw - 16px))}
+  .side{width:min(100%,600px);max-height:none;overflow:visible}
+}
+.action{display:grid;grid-template-columns:auto 1fr;gap:12px 14px;align-items:center;padding:14px}
+.act-text{min-width:0}
+.who{font-weight:900;font-size:1.12rem;display:flex;align-items:center;gap:8px;min-width:0}
+.who span.nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.msg{font-size:.95rem;color:var(--ink);min-height:2.6em;margin-top:2px}
+.roll{grid-column:1/-1;width:100%}
+.roll.ready-pulse:not([aria-disabled="true"]){animation:ready 1.6s ease-in-out infinite}
+@keyframes ready{0%,100%{transform:none}50%{transform:translateY(-2px)}}
+.keys{grid-column:1/-1;font-size:.76rem;color:var(--ink-dim);text-align:center}
+kbd{font:inherit;font-weight:800;padding:1px 6px;border-radius:6px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25)}
+/* Die */
+.die{width:84px;height:84px;border-radius:22%;background:linear-gradient(145deg,#fff,#d9deea);display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:13%;
+  box-shadow:inset 0 -6px 0 rgba(0,0,0,.14),inset 0 3px 0 #fff,0 8px 0 #8c95a9,0 14px 18px rgba(0,0,0,.35);cursor:pointer;margin-bottom:8px}
+.die i{border-radius:50%;margin:16%;background:#1b2338;opacity:0;transform:scale(.4);transition:opacity .08s,transform .12s}
+.die i.on{opacity:1;transform:none}
+.die.tumble{animation:tumble .42s linear infinite}
+.die.land{animation:land .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes tumble{0%{transform:rotate(0) translateY(0)}25%{transform:rotate(100deg) translateY(-14px) scale(1.06)}50%{transform:rotate(200deg) translateY(0)}75%{transform:rotate(290deg) translateY(-8px) scale(1.03)}100%{transform:rotate(360deg)}}
+@keyframes land{0%{transform:translateY(-18px) scale(1.12) rotate(-8deg)}60%{transform:translateY(0) scale(.96)}100%{transform:none}}
+/* Players */
+.players{padding:10px;display:grid;gap:8px}
+.pcard{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:8px 10px;border-radius:14px;border:2px solid transparent;background:rgba(255,255,255,.06);transition:background .2s,border-color .2s}
+.pcard.current{border-color:var(--accent);background:rgba(255,255,255,.15)}
+.pcard.winner{border-color:#ffe27a;background:rgba(255,226,122,.2)}
+.pinfo{min-width:0}
+.pname{display:flex;align-items:center;gap:6px;font-weight:800;min-width:0}
+.pname .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{font-size:.66rem;font-weight:900;letter-spacing:.06em;padding:1px 6px;border-radius:6px;background:rgba(255,255,255,.2);flex:none}
+.tag{display:none;font-size:.7rem;font-weight:900;letter-spacing:.05em;color:var(--accent-ink);background:var(--accent);padding:1px 7px;border-radius:999px;flex:none}
+.pcard.current .tag{display:inline-block}
+.bar{height:7px;border-radius:99px;background:rgba(0,0,0,.35);overflow:hidden;margin-top:5px}
+.bar i{display:block;height:100%;width:1%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width .35s}
+.ppos{font-weight:900;text-align:right;line-height:1.05}
+.ppos small{display:block;font-size:.66rem;font-weight:700;color:var(--ink-dim);letter-spacing:.08em;text-transform:uppercase}
+.ppos b{font-size:1.4rem}
+@media(max-aspect-ratio:1/1),(max-width:640px){.players{grid-template-columns:1fr 1fr}.pcard{grid-template-columns:auto 1fr;padding:6px 8px}.ppos{grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline}.ppos small{display:inline}.ppos b{font-size:1.05rem}}
+/* Log */
+.log{padding:8px 12px}
+.log summary{cursor:pointer;font-weight:800;min-height:34px;display:flex;align-items:center;list-style:none}
+.log summary::before{content:"▸";margin-right:8px;transition:transform .15s}
+.log[open] summary::before{transform:rotate(90deg)}
+.log ol{max-height:170px;overflow:auto;display:grid;gap:4px;margin-top:4px;scrollbar-width:thin}
+.log li{font-size:.84rem;display:flex;gap:6px;align-items:flex-start;padding:3px 0;border-top:1px solid rgba(255,255,255,.08)}
+.log li .g{flex:none;width:1.1em;text-align:center}
+.log li.empty{opacity:.7}
+/* Coach */
+.coach{padding:12px 14px;display:grid;gap:8px;border-color:var(--accent)}
+.coach h4{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.coach .btns{display:flex;gap:8px;justify-content:flex-end}
+.spot{outline:3px dashed var(--accent)!important;outline-offset:4px;border-radius:14px;animation:spot 1.4s ease-in-out infinite}
+@keyframes spot{50%{outline-color:#fff}}
+/* Board overlay banners */
+.turn-banner,.event-banner{position:absolute;left:50%;pointer-events:none;opacity:0;text-align:center;font-weight:900}
+.turn-banner{top:2.5%;transform:translate(-50%,-10px);padding:.4rem .9rem;border-radius:999px;background:rgba(10,8,24,.86);color:#fff;border:2px solid var(--accent);
+  display:flex;align-items:center;gap:8px;transition:opacity .25s,transform .25s;font-size:clamp(.8rem,2.4vw,1.05rem);max-width:90%;white-space:nowrap}
+.turn-banner.show{opacity:1;transform:translate(-50%,0)}
+.turn-banner span.nm{overflow:hidden;text-overflow:ellipsis}
+.event-banner{top:44%;transform:translate(-50%,-50%) scale(.8);padding:.55rem 1.3rem;border-radius:999px;border:3px solid #fff;transition:opacity .25s,transform .3s cubic-bezier(.3,1.6,.5,1);
+  font-size:clamp(1rem,3.6vw,1.9rem);color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.45);max-width:94%}
+.event-banner.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.event-banner.up{background:#12803a}.event-banner.down{background:#b3122f}.event-banner.win{background:#ffd23f;color:#2a1a00}.event-banner.info{background:#273056}
+/* Board SVG styling (colors flow from CSS variables) */
+.b-frame{fill:var(--frame);stroke:var(--accent);stroke-width:5}
+.b-inner{fill:var(--frame2)}
+.tile{stroke:var(--tileStroke);stroke-width:2}
+.t-a{fill:var(--tileA)}.t-b{fill:var(--tileB)}.t-start{fill:var(--startFill)}.t-fin{fill:var(--finFill)}
+.num,.hint,.lbl{font-family:"Avenir Next","Segoe UI",Roboto,Arial,sans-serif;paint-order:stroke;stroke:var(--tileHalo);stroke-width:5px;stroke-linejoin:round;pointer-events:none;user-select:none}
+.num{font-size:28px;font-weight:800;fill:var(--tileText)}
+.hint{font-size:21px;font-weight:900;text-anchor:end}
+.hint.up{fill:var(--hintUp)}.hint.down{fill:var(--hintDown)}
+.lbl{font-size:16px;font-weight:900;letter-spacing:.1em;text-anchor:middle;fill:var(--tileText)}
+.ladder,.snake{transition:opacity .3s;pointer-events:none}
+.focus .ladder,.focus .snake{opacity:.25}.focus .hot{opacity:1}
+.target{fill:rgba(255,255,255,.2);stroke:var(--accent);stroke-width:7;animation:tpulse 1s ease-in-out infinite}
+@keyframes tpulse{50%{stroke-opacity:.35}}
+.piece .ring{display:none;fill:none;stroke:var(--accent);stroke-width:6;stroke-dasharray:12 9;transform-box:fill-box;transform-origin:center;animation:spin 7s linear infinite}
+.piece.active .ring{display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pnum{font:900 26px "Avenir Next",Arial,sans-serif;text-anchor:middle;pointer-events:none}
+.spark{animation:spark .85s ease-out forwards}
+@keyframes spark{from{transform:translate(0,0) scale(1);opacity:1}to{transform:translate(var(--dx),var(--dy)) scale(.2);opacity:0}}
+.float{font:900 38px "Avenir Next",Arial,sans-serif;text-anchor:middle;paint-order:stroke;stroke:#10141f;stroke-width:8px;stroke-linejoin:round;animation:rise 1.3s ease-out forwards}
+@keyframes rise{from{transform:translateY(0);opacity:0}15%{opacity:1}to{transform:translateY(-70px);opacity:0}}
+
+/* ---------- Dialogs & toasts ---------- */
+dialog{border:0;padding:0;border-radius:24px;width:min(680px,calc(100vw - 20px));max-height:calc(100dvh - 24px);color:var(--ink);
+  background:linear-gradient(160deg,var(--dlg1),var(--dlg2));box-shadow:0 30px 80px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.18);overflow:hidden}
+dialog[open]{display:flex;flex-direction:column;animation:pop .28s cubic-bezier(.3,1.4,.5,1)}
+dialog::backdrop{background:rgba(5,6,18,.68);backdrop-filter:blur(3px)}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+.dlg-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px 10px 20px;border-bottom:1px solid rgba(255,255,255,.12)}
+.dlg-head h2{font-size:1.35rem;font-weight:900}
+.dlg-body{padding:16px 20px 20px;overflow:auto;min-height:0;display:flex;flex-direction:column;gap:14px;scrollbar-width:thin}
+.dlg-body h3{font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.dlg-body p,.dlg-body li{font-size:.95rem}
+.dlg-body ul.bul{list-style:disc;padding-left:1.2rem;display:grid;gap:6px}
+.dlg-actions{display:flex;gap:10px;flex-wrap:wrap}
+.dlg-actions .btn{flex:1 1 150px}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.setrow label,.setrow .lab{font-weight:800}
+.setrow small{display:block;font-weight:500;color:var(--ink-dim);font-size:.78rem}
+input[type=range]{width:min(200px,45vw);accent-color:var(--accent);min-height:44px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button{border:0;border-radius:999px;padding:.45rem 1rem;min-height:40px;font-weight:800;cursor:pointer;background:rgba(255,255,255,.1)}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.stat{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.08)}
+.stat b{display:block;font-size:1.5rem;font-weight:900;line-height:1.1}
+.stat span{font-size:.78rem;color:var(--ink-dim)}
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.ach{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.07);display:grid;gap:2px;border:2px solid transparent}
+.ach.got{border-color:var(--accent);background:rgba(255,255,255,.15)}
+.ach b{font-size:.98rem}.ach small{color:var(--ink-dim)}.ach em{font-style:normal;font-size:.75rem;font-weight:900;color:var(--accent)}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{padding:6px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.1)}
+th:first-child,td:first-child{text-align:left}
+th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dim)}
+.win-hero{text-align:center;display:grid;gap:6px;justify-items:center}
+.win-hero h2{font-size:clamp(1.5rem,5vw,2.2rem);font-weight:900;color:#ffe27a}
+.rank{display:grid;gap:6px}
+.rank li{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:12px;background:rgba(255,255,255,.08)}
+.rank li .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:800}
+.dist{display:flex;align-items:flex-end;gap:8px;height:72px}
+.dist div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:.72rem;gap:2px}
+.dist i{display:block;width:100%;background:linear-gradient(180deg,var(--accent),var(--accent2));border-radius:6px 6px 2px 2px;min-height:3px}
+.toasts{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:100;display:grid;gap:8px;width:min(92vw,420px);pointer-events:none}
+.toast{padding:10px 14px;border-radius:14px;background:#10141f;color:#fff;border:2px solid var(--accent);font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.5);animation:toastIn .35s cubic-bezier(.3,1.4,.5,1) both}
+.toast small{display:block;font-weight:500;opacity:.85}
+@keyframes toastIn{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+.note{font-size:.8rem;color:var(--ink-dim)}
+noscript{position:fixed;inset:0;z-index:200;background:#10141f;color:#fff;display:grid;place-items:center;padding:20px;text-align:center}
+
+/* Reduced motion (class set from settings / OS preference) */
+html.rm *,html.rm *::before,html.rm *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+html.rm .title-board{transform:none}
+@media(prefers-reduced-motion:reduce){.title-board{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+<div id="toasts" class="toasts" aria-hidden="true"></div>
+<noscript>This game needs JavaScript enabled in your browser to run.</noscript>
+
+<main id="main">
+  <!-- ============================ TITLE ============================ -->
+  <section id="screen-title" class="screen active" aria-labelledby="title-h">
+    <div class="title-wrap">
+      <div class="title-copy">
+        <p class="eyebrow">A Coast&nbsp;to&nbsp;Coast Board Adventure</p>
+        <h1 class="logo" id="title-h" tabindex="-1"><span>Snakes</span><span class="amp">&amp;</span><span class="l2">Ladders</span></h1>
+        <p class="tagline">Roll, climb, slide and race across five original American-inspired worlds — from a dusty desert highway to a neon skyline. Easy to learn, impossible to put down.</p>
+        <div class="menu-btns">
+          <button id="btn-continue" class="btn primary big" hidden>▶ Continue saved match</button>
+          <button id="btn-play" class="btn primary big">Play</button>
+          <button id="btn-quick" class="btn big">Quick match vs Computer</button>
+          <div class="row3">
+            <button id="btn-rules" class="btn sm">How to play</button>
+            <button id="btn-stats" class="btn sm">Stats &amp; badges</button>
+            <button id="btn-settings" class="btn sm">Settings</button>
+          </div>
+        </div>
+        <p class="fine">An original digital adaptation of the classic dice game. Works offline, no account, nothing leaves your device.</p>
+      </div>
+      <div class="title-board"><svg id="preview-svg" role="img" aria-label="Animated preview of the Snakes and Ladders board"></svg></div>
+    </div>
+  </section>
+
+  <!-- ============================ SETUP ============================ -->
+  <section id="screen-setup" class="screen" aria-labelledby="setup-h">
+    <div class="setup-wrap panel">
+      <div class="setup-head">
+        <button id="setup-back" class="btn sm">← Back</button>
+        <h2 id="setup-h" tabindex="-1">Set up your match</h2>
+      </div>
+      <div class="setup-grid">
+        <section aria-labelledby="h-mode">
+          <h3 id="h-mode">Game mode</h3>
+          <div id="su-modes" class="cards"></div>
+          <div id="su-seed-row" class="field" hidden>
+            <label for="su-seed">Board seed (optional — same seed, same board)</label>
+            <input id="su-seed" type="text" maxlength="12" autocomplete="off" spellcheck="false" placeholder="Leave empty for a random board">
+          </div>
+        </section>
+        <section aria-labelledby="h-players">
+          <h3 id="h-players">Players</h3>
+          <div id="su-count" role="group" aria-label="Number of players"></div>
+          <div id="su-players"></div>
+        </section>
+        <section aria-labelledby="h-world">
+          <h3 id="h-world">World</h3>
+          <div id="su-themes" class="cards"></div>
+        </section>
+        <section aria-labelledby="h-rules">
+          <h3 id="h-rules">Rules</h3>
+          <div id="su-rules"></div>
+          <p id="su-preview" class="preview-line" aria-live="polite"></p>
+        </section>
+      </div>
+      <div class="setup-foot"><button id="su-start" class="btn primary big">Start match ▶</button></div>
+    </div>
+  </section>
+
+  <!-- ============================ GAME ============================ -->
+  <section id="screen-game" class="screen" aria-label="Game board">
+    <header class="topbar">
+      <button id="g-menu" class="btn sm" aria-label="Open menu (Escape)">☰ Menu</button>
+      <div class="route"><strong id="g-route"></strong><span id="g-meta"></span></div>
+      <button id="g-sound" class="btn icon sm" aria-label="Toggle sound effects (M)" aria-pressed="true"></button>
+      <button id="g-settings" class="btn sm">Settings</button>
+    </header>
+    <div class="game-main">
+      <div class="board-wrap" id="board-wrap">
+        <svg id="board-svg" role="img" aria-label="Game board"></svg>
+        <div id="turn-banner" class="turn-banner" aria-hidden="true"></div>
+        <div id="event-banner" class="event-banner" aria-hidden="true"></div>
+      </div>
+      <aside class="side" aria-label="Game panel">
+        <section class="panel action" id="action" aria-label="Dice and turn">
+          <div class="die" id="die" aria-hidden="true"></div>
+          <div class="act-text">
+            <p class="who" id="who"></p>
+            <p class="msg" id="msg"></p>
+          </div>
+          <button id="btn-roll" class="btn primary big roll" aria-disabled="true">Roll the die</button>
+          <p class="keys"><kbd>Space</kbd> or <kbd>R</kbd> to roll · <kbd>Esc</kbd> menu · <kbd>M</kbd> mute</p>
+        </section>
+        <section id="coach" class="panel coach" hidden aria-label="Quick tutorial"></section>
+        <section class="panel players" id="players" aria-label="Players"></section>
+        <details class="panel log" id="log-wrap" open>
+          <summary>Event feed</summary>
+          <ol id="log" aria-label="Recent events"></ol>
+        </details>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<!-- ============================ DIALOGS ============================ -->
+<dialog id="d-rules" aria-labelledby="d-rules-h">
+  <div class="dlg-head"><h2 id="d-rules-h">How to play</h2><button class="btn sm" data-close>Close ✕</button></div>
+  <div class="dlg-body">
+    <h3>Goal</h3>
+    <p>Be the first to land on tile <b>100</b>. Everyone starts on tile <b>1</b> and takes turns rolling one die.</p>
+    <h3>Your turn</h3>
+    <ul class="bul">
+      <li>Press <b>Roll</b> (or <kbd>Space</kbd> / <kbd>R</kbd>). Your piece hops that many tiles, following the numbers in a zig-zag.</li>
+      <li><b>▲ Ladders</b> — if you stop on the bottom of a ladder, you climb to the top.</li>
+      <li><b>▼ Snakes</b> — if you stop on a snake's head, you slide down to its tail. It's just luck; the match goes on!</li>
+      <li>Small ▲ / ▼ labels in the corner of a tile tell you where it leads.</li>
+      <li>Pieces can share a tile — nobody gets bumped.</li>
+    </ul>
+    <h3>Finishing</h3>
+    <ul class="bul">
+      <li><b>Exact finish</b> (default): you must roll exactly what you need. If your roll is too high, you stay put.</li>
+      <li><b>Bounce back</b> (optional): if your roll is too high, you move to 100 and bounce back the extra steps.</li>
+      <li><b>Bonus on six</b> (optional): rolling a 6 earns another roll, up to two bonus rolls in a row.</li>
+    </ul>
+    <h3>Fair play</h3>
+    <p>All dice — yours and the computer's — come from the same secure random source. Computer players never get lucky rolls, hidden boosts or different rules; they only pace themselves. Each match summary shows the real roll distribution.</p>
+    <h3>Modes &amp; worlds</h3>
+    <ul class="bul">
+      <li><b>Classic</b> — the standard board at a relaxed pace.</li>
+      <li><b>Quick Roll</b> — the same rules with faster animations.</li>
+      <li><b>Wild Board</b> — a freshly generated, balanced board. Enter a seed to replay a board.</li>
+      <li>New <b>worlds</b> unlock as you play. Worlds change the look and sound only — never the rules.</li>
+    </ul>
+    <h3>Controls</h3>
+    <p><kbd>Space</kbd>/<kbd>R</kbd> roll · <kbd>Esc</kbd> menu · <kbd>M</kbd> mute · or just tap the buttons. Everything works with keyboard, mouse and touch.</p>
+  </div>
+</dialog>
+
+<dialog id="d-stats" aria-labelledby="d-stats-h">
+  <div class="dlg-head"><h2 id="d-stats-h">Stats &amp; badges</h2><button class="btn sm" data-close>Close ✕</button></div>
+  <div class="dlg-body">
+    <div class="tabs" role="tablist" id="stat-tabs"></div>
+    <div id="stat-panel"></div>
+  </div>
+</dialog>
+
+<dialog id="d-settings" aria-labelledby="d-set-h">
+  <div class="dlg-head"><h2 id="d-set-h">Settings</h2><button class="btn sm" data-close>Close ✕</button></div>
+  <div class="dlg-body" id="settings-body"></div>
+</dialog>
+
+<dialog id="d-pause" aria-labelledby="d-pause-h">
+  <div class="dlg-head"><h2 id="d-pause-h">Game paused</h2><button class="btn sm" data-close>Resume ✕</button></div>
+  <div class="dlg-body">
+    <p class="note">Your match is saved automatically after every turn, so you can safely leave and continue later from the title screen.</p>
+    <div class="dlg-actions" id="pause-actions"></div>
+  </div>
+</dialog>
+
+<dialog id="d-summary" aria-labelledby="d-sum-h">
+  <div class="dlg-head"><h2 id="d-sum-h">Match complete</h2><button class="btn sm" data-close>View board ✕</button></div>
+  <div class="dlg-body" id="summary-body"></div>
+</dialog>
+
+<script>
+'use strict';
+/* =========================================================================
+   SNAKES & LADDERS — COAST TO COAST
+   Single-file architecture:
+    1 CONFIG   2 STRINGS   3 UTILS   4 STORAGE   5 DATA (themes/pieces/boards)
+    6 ENGINE (pure rules)  7 SOUND   8 SCOPE (cancellable timers/tweens)
+    9 SCENE (background)  10 CONFETTI  11 BOARD VIEW (SVG renderer)
+   12 MATCH CONTROLLER    13 UI (screens/dialogs/setup)   14 BOOT
+   Logic never reads the DOM; the renderer never owns game state.
+   Add ?debug to the URL for deterministic-dice testing helpers (window.__snl).
+   ========================================================================= */
+const DEBUG = /[?&]debug\b/.test(location.search);
+
+/* ---------- 1. CONFIG ---------- */
+const CFG = {
+  size: 100, minPlayers: 2, maxPlayers: 4, nameMax: 12,
+  anim: { hopMs: 170, ladderMs: 900, snakeMs: 1050, diceMs: 650, thinkMs: 800, turnGapMs: 420, settleMs: 240, bannerMs: 1500 },
+  speeds: { relaxed: 1.35, normal: 1, fast: 0.55 },
+  modeSpeed: { classic: 1, quick: 0.6, wild: 1 },
+  bonusSixMaxChain: 2,
+  particles: { bg: 42, confetti: 150, burst: 34 },
+  logMax: 40, leaderboardMax: 10, bigJump: 40,
+  keyPrefix: 'snl.c2c.v1.'
+};
+const GEO = { vb: 1000, m: 20, t: 96 };   // board drawing geometry (SVG units)
+
+/* ---------- 2. STRINGS (centralised for future localisation) ---------- */
+const plural = (n, one, many) => `${n} ${n === 1 ? one : (many || one + 's')}`;
+const STR = {
+  modes: {
+    classic: { name: 'Classic', desc: 'The traditional 100-tile route at a relaxed pace.' },
+    quick: { name: 'Quick Roll', desc: 'Same rules, faster animations. A match in minutes.' },
+    wild: { name: 'Wild Board', desc: 'A freshly generated, balanced board. Share the seed to replay it.' }
+  },
+  yourTurn: n => `${n}, it's your turn!`,
+  cpuTurn: n => `${n} is thinking…`,
+  rolled: (n, r) => `${n} rolled a ${r}.`,
+  moved: (n, t) => `${n} moves to tile ${t}.`,
+  ladder: (n, a, b) => `Ladder! ${n} climbs from ${a} to ${b} (+${b - a}).`,
+  snake: (n, a, b) => `Snake! ${n} slides from ${a} to ${b} (−${a - b}). The race goes on!`,
+  needExact: (n, need, pos) => `${n} needs exactly ${need} to finish and stays on ${pos}.`,
+  bounce: (n, t) => `${n} overshot and bounced back to ${t}.`,
+  bonus: n => `${n} rolled a six — roll again!`,
+  win: (n, goal) => `${n} reached tile 100 and wins at ${goal}!`,
+  start: (n, goal) => `Race to ${goal}! First to tile 100 wins. ${n} goes first.`,
+  order: names => `Turn order: ${names.join(' → ')}.`,
+  banner: { ladder: (d) => `▲ LADDER +${d}`, snake: (d) => `▼ SNAKE −${d}`, win: n => `★ ${n} WINS! ★`, bonus: '⚄ BONUS ROLL', exact: 'EXACT ROLL NEEDED', bounce: '↩ BOUNCE BACK' },
+  roll: { ready: 'Roll the die', cpu: n => `${n} is playing…`, rolling: 'Rolling…', moving: 'Moving…', again: 'Play again' },
+  saved: 'Match saved. Continue any time from the title screen.',
+  coach: [
+    { sel: '#players', title: 'Step 1 of 5 · Your piece', text: 'Every player has a piece with a unique shape, number and colour. The highlighted card shows whose turn it is.' },
+    { sel: '#action', title: 'Step 2 of 5 · Roll', text: 'Press Roll (or Space) to throw the die. Your piece hops that many tiles along the zig-zag path.' },
+    { sel: '#board-wrap', title: 'Step 3 of 5 · Ladders ▲', text: 'Stop on the bottom of a ladder and you climb to the top. Small ▲ labels show where each ladder leads.' },
+    { sel: '#board-wrap', title: 'Step 4 of 5 · Snakes ▼', text: 'Stop on a snake\'s head and you slide to its tail. It\'s just luck — the race goes on!' },
+    { sel: '#board-wrap', title: 'Step 5 of 5 · Finish', text: 'Reach tile 100 to win. By default you need the exact number to finish. Good luck!' }
+  ]
+};
+
+/* ---------- 3. UTILS ---------- */
+const q = (sel, root) => (root || document).querySelector(sel);
+const qa = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const easeIO = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const num = (v, d) => (typeof v === 'number' && isFinite(v) ? v : (d || 0));
+function h(tag, attrs, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v == null || v === false) continue;
+    if (k === 'class') el.className = v;
+    else if (k === 'text') el.textContent = v;
+    else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) el.append(c.nodeType ? c : document.createTextNode(String(c)));
+  return el;
+}
+function s(tag, attrs, ...kids) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k, v] of Object.entries(attrs || {})) if (v != null) el.setAttribute(k, v);
+  for (const c of kids.flat()) if (c) el.append(c);
+  return el;
+}
+function secureInt(n) {            // unbiased integer in [0,n)
+  const c = window.crypto;
+  if (c && c.getRandomValues) {
+    const lim = Math.floor(0x100000000 / n) * n, buf = new Uint32Array(1);
+    do { c.getRandomValues(buf); } while (buf[0] >= lim);
+    return buf[0] % n;
+  }
+  return Math.floor(Math.random() * n);
+}
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = secureInt(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function hashSeed(str) { let x = 2166136261; for (let i = 0; i < str.length; i++) { x ^= str.charCodeAt(i); x = Math.imul(x, 16777619); } return x >>> 0; }
+function mulberry32(a) { return function () { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function fmtTime(ms) { const t = Math.max(0, Math.round(ms / 1000)), m = Math.floor(t / 60), sec = t % 60; return m >= 60 ? `${Math.floor(m / 60)}h ${m % 60}m` : `${m}:${String(sec).padStart(2, '0')}`; }
+function randomSeed() { const a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let o = ''; for (let i = 0; i < 5; i++) o += a[secureInt(a.length)]; return o; }
+function cleanName(v, fb) { const t = String(v == null ? '' : v).replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, CFG.nameMax); return t || fb; }
+function cleanSeed(v) { return String(v == null ? '' : v).replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 12); }
+
+/* ---------- 4. STORAGE (versioned, sanitised, memory fallback) ---------- */
+const Store = (() => {
+  let ok = true; const mem = {};
+  try { const k = CFG.keyPrefix + '_t'; localStorage.setItem(k, '1'); localStorage.removeItem(k); } catch (e) { ok = false; }
+  return {
+    persistent: () => ok,
+    get(key, fb) { try { const raw = ok ? localStorage.getItem(CFG.keyPrefix + key) : mem[key]; return raw == null ? fb : JSON.parse(raw); } catch (e) { return fb; } },
+    set(key, val) { try { const raw = JSON.stringify(val); if (ok) localStorage.setItem(CFG.keyPrefix + key, raw); else mem[key] = raw; } catch (e) { /* quota or privacy mode: ignore */ } },
+    del(key) { try { if (ok) localStorage.removeItem(CFG.keyPrefix + key); else delete mem[key]; } catch (e) { /* ignore */ } },
+    wipe() { ['settings', 'profile', 'setup', 'match'].forEach(k => this.del(k)); }
+  };
+})();
+const DEF_SETTINGS = { sfx: true, music: false, sfxVol: 0.7, musVol: 0.5, speed: 'normal', motion: 'auto', haptics: true, largeText: false };
+function sanitizeSettings(r) {
+  const o = { ...DEF_SETTINGS };
+  if (r && typeof r === 'object') {
+    for (const k of ['sfx', 'music', 'haptics', 'largeText']) if (typeof r[k] === 'boolean') o[k] = r[k];
+    for (const k of ['sfxVol', 'musVol']) if (typeof r[k] === 'number' && isFinite(r[k])) o[k] = clamp(r[k], 0, 1);
+    if (['relaxed', 'normal', 'fast'].includes(r.speed)) o.speed = r.speed;
+    if (['auto', 'reduce', 'full'].includes(r.motion)) o.motion = r.motion;
+  }
+  return o;
+}
+function sanitizeProfile(r) {
+  const p = { matches: 0, humanWins: 0, computerWins: 0, streak: 0, bestStreak: 0, ladders: 0, snakes: 0, sixes: 0, totalRolls: 0, playMs: 0,
+    fastestWin: null, longestGame: 0, themeUse: {}, themesWon: {}, modesWon: {}, achievements: {}, leaderboard: [], tutorialDone: false };
+  if (!r || typeof r !== 'object') return p;
+  for (const k of ['matches', 'humanWins', 'computerWins', 'streak', 'bestStreak', 'ladders', 'snakes', 'sixes', 'totalRolls', 'playMs', 'longestGame']) p[k] = Math.max(0, Math.floor(num(r[k])));
+  p.fastestWin = typeof r.fastestWin === 'number' && r.fastestWin > 0 ? Math.floor(r.fastestWin) : null;
+  p.tutorialDone = r.tutorialDone === true;
+  for (const k of ['themeUse', 'themesWon', 'modesWon', 'achievements']) if (r[k] && typeof r[k] === 'object') for (const [a, b] of Object.entries(r[k])) if (typeof b === 'number' && isFinite(b)) p[k][String(a).slice(0, 20)] = b;
+  if (Array.isArray(r.leaderboard)) p.leaderboard = r.leaderboard.slice(0, CFG.leaderboardMax).filter(e => e && typeof e === 'object').map(e => ({
+    name: cleanName(e.name, 'Player'), rolls: Math.max(1, Math.floor(num(e.rolls, 1))), mode: String(e.mode || 'classic').slice(0, 10), theme: String(e.theme || 'sunset').slice(0, 10), date: num(e.date) }));
+  return p;
+}
+const DEF_SETUP = () => ({ mode: 'classic', count: 2, theme: 'sunset', finish: 'exact', bonusSix: false, randomOrder: false, seed: '',
+  players: [{ name: 'Player 1', type: 'human' }, { name: 'Computer 2', type: 'computer' }, { name: 'Player 3', type: 'human' }, { name: 'Player 4', type: 'human' }] });
+function sanitizeSetup(r) {
+  const o = DEF_SETUP();
+  if (!r || typeof r !== 'object') return o;
+  if (['classic', 'quick', 'wild'].includes(r.mode)) o.mode = r.mode;
+  o.count = clamp(Math.floor(num(r.count, 2)), CFG.minPlayers, CFG.maxPlayers);
+  if (typeof r.theme === 'string' && THEMES[r.theme]) o.theme = r.theme;
+  if (['exact', 'bounce'].includes(r.finish)) o.finish = r.finish;
+  o.bonusSix = r.bonusSix === true; o.randomOrder = r.randomOrder === true; o.seed = cleanSeed(r.seed);
+  if (Array.isArray(r.players)) r.players.slice(0, CFG.maxPlayers).forEach((p, i) => { if (p && typeof p === 'object') o.players[i] = { name: String(p.name == null ? '' : p.name).slice(0, CFG.nameMax), type: p.type === 'computer' ? 'computer' : 'human' }; });
+  return o;
+}
+
+/* ---------- 5. DATA ---------- */
+const SNAKE_COLORS = ['#d6336c', '#2f9e44', '#f08c00', '#7048e8'];
+const THEMES = {
+  sunset: { name: 'Sunset Highway', tag: 'Desert road at golden hour', start: 'Dusty Diner', goal: 'Sunset Overlook', unlock: null, root: 0,
+    sky: [[0, '#1b1040'], [.4, '#7a1d5c'], [.72, '#f2713b'], [1, '#ffb347']],
+    vars: { '--bg-bot': '#f2713b', '--accent': '#ffb347', '--accent2': '#ff5d73', '--accent-ink': '#2a1200', '--panel': 'rgba(30,12,42,.8)', '--panel-bd': 'rgba(255,255,255,.16)', '--ink': '#fff4e6', '--ink-dim': '#e6d3c4', '--frame': '#3b1030', '--frame2': '#5a1f48', '--tileA': '#fff1dc', '--tileB': '#ffd9a8', '--tileText': '#4a1f0a', '--tileHalo': '#fff7ea', '--tileStroke': 'rgba(74,31,10,.28)', '--startFill': '#c7f0c8', '--finFill': '#ffe27a', '--hintUp': '#0b6b2e', '--hintDown': '#b3122f', '--dlg1': '#2c1744', '--dlg2': '#1a1030' },
+    snakes: SNAKE_COLORS, snakeEdge: '#1b1020', ladder: { rail: '#c98a45', edge: '#3d2210', rung: '#f0b86e' },
+    parts: { col: '255,200,120', vy: -6, vx: 8, r: [1, 2.4], tw: false, a: .55 } },
+  park: { name: 'Evergreen Park', tag: 'Misty pines and mountain trails', start: 'Trailhead', goal: 'Summit Lodge', unlock: null, root: -2,
+    sky: [[0, '#06182c'], [.45, '#0e4a4f'], [.8, '#2b8a5a'], [1, '#9bd17a']],
+    vars: { '--bg-bot': '#2b8a5a', '--accent': '#f4c542', '--accent2': '#ff8a5b', '--accent-ink': '#2b2100', '--panel': 'rgba(6,30,28,.82)', '--panel-bd': 'rgba(255,255,255,.16)', '--ink': '#f3fff0', '--ink-dim': '#cfe6cf', '--frame': '#0f3b2b', '--frame2': '#17503a', '--tileA': '#eef8e4', '--tileB': '#cfe8bd', '--tileText': '#123524', '--tileHalo': '#f6fff0', '--tileStroke': 'rgba(18,53,36,.28)', '--startFill': '#bfe6ff', '--finFill': '#ffe27a', '--hintUp': '#0b6b2e', '--hintDown': '#b3122f', '--dlg1': '#0f3a35', '--dlg2': '#071f22' },
+    snakes: SNAKE_COLORS, snakeEdge: '#0d1a14', ladder: { rail: '#b9803f', edge: '#3a2410', rung: '#e3b46a' },
+    parts: { col: '225,255,140', vy: -3, vx: 4, r: [1.5, 3], tw: true, a: .8 } },
+  neon: { name: 'Neon Metropolis', tag: 'A glowing skyline that never sleeps', start: 'Subway Gate', goal: 'Skyline Tower', unlock: { type: 'matches', n: 3 }, root: 3,
+    sky: [[0, '#05060f'], [.5, '#190a38'], [1, '#4a0f63']],
+    vars: { '--bg-bot': '#4a0f63', '--accent': '#3be8ff', '--accent2': '#ff4fd8', '--accent-ink': '#021b22', '--panel': 'rgba(8,8,26,.84)', '--panel-bd': 'rgba(59,232,255,.3)', '--ink': '#eef0ff', '--ink-dim': '#b9bde6', '--frame': '#0b0d26', '--frame2': '#12163a', '--tileA': '#171a45', '--tileB': '#20245a', '--tileText': '#eaf0ff', '--tileHalo': '#0a0c24', '--tileStroke': 'rgba(59,232,255,.3)', '--startFill': '#145a52', '--finFill': '#6b2a7a', '--hintUp': '#7dffa5', '--hintDown': '#ff8aa6', '--dlg1': '#1a1244', '--dlg2': '#090a22' },
+    snakes: ['#ff4fd8', '#3be8ff', '#b6ff3b', '#ffb13b'], snakeEdge: '#05060f', ladder: { rail: '#7df9ff', edge: '#05213a', rung: '#ff8cf0' },
+    parts: { col: '80,230,255', vy: 70, vx: -8, r: [.8, 1.4], tw: false, a: .5, streak: true } },
+  frost: { name: 'Frost Festival', tag: 'Snowy lights and northern skies', start: 'Cocoa Cabin', goal: 'Lantern Square', unlock: { type: 'wins', n: 1 }, root: 5,
+    sky: [[0, '#0b1d3a'], [.5, '#2a5f95'], [.85, '#9fd0f0'], [1, '#e6f6ff']],
+    vars: { '--bg-bot': '#9fd0f0', '--accent': '#ffd45e', '--accent2': '#ff6f91', '--accent-ink': '#2b2100', '--panel': 'rgba(10,28,56,.82)', '--panel-bd': 'rgba(255,255,255,.2)', '--ink': '#f2f9ff', '--ink-dim': '#c5dcf0', '--frame': '#123a63', '--frame2': '#1b4f82', '--tileA': '#f4fbff', '--tileB': '#d4eaf9', '--tileText': '#12304f', '--tileHalo': '#ffffff', '--tileStroke': 'rgba(18,48,79,.28)', '--startFill': '#cdf1d6', '--finFill': '#ffe27a', '--hintUp': '#0b6b2e', '--hintDown': '#b3122f', '--dlg1': '#173a66', '--dlg2': '#0a1e3c' },
+    snakes: SNAKE_COLORS, snakeEdge: '#0b1d33', ladder: { rail: '#e3edf7', edge: '#28425e', rung: '#9fc4e6' },
+    parts: { col: '255,255,255', vy: 24, vx: 8, r: [1.2, 3], tw: false, a: .85 } },
+  coast: { name: 'Boardwalk Bay', tag: 'Ferris wheels and salty breezes', start: 'Pier Gate', goal: 'Lighthouse Point', unlock: { type: 'matches', n: 6 }, root: 2,
+    sky: [[0, '#0a2a4a'], [.35, '#1b8aa8'], [.56, '#ffd89a'], [1, '#0a3f66']],
+    vars: { '--bg-bot': '#0a3f66', '--accent': '#ff8a5b', '--accent2': '#ffd166', '--accent-ink': '#2a0e00', '--panel': 'rgba(5,38,60,.82)', '--panel-bd': 'rgba(255,255,255,.18)', '--ink': '#fffaf0', '--ink-dim': '#d3e8ee', '--frame': '#0b3d5c', '--frame2': '#12577e', '--tileA': '#fffaf0', '--tileB': '#c3f0ee', '--tileText': '#07324a', '--tileHalo': '#ffffff', '--tileStroke': 'rgba(7,50,74,.28)', '--startFill': '#cdeed2', '--finFill': '#ffe27a', '--hintUp': '#0b6b2e', '--hintDown': '#b3122f', '--dlg1': '#0f4a6b', '--dlg2': '#06263f' },
+    snakes: SNAKE_COLORS, snakeEdge: '#06202f', ladder: { rail: '#f2d6a2', edge: '#4a2f1a', rung: '#ff8a5b' },
+    parts: { col: '255,255,230', vy: -4, vx: 10, r: [1, 2], tw: true, a: .8 } }
+};
+const THEME_ORDER = ['sunset', 'park', 'neon', 'frost', 'coast'];
+// Pieces: unique shape + number + colour (never colour alone)
+const PIECES = [
+  { name: 'Orange circle', glyph: '●', color: '#e8590c', ink: '#ffffff', d: 'M-24 0a24 24 0 1 0 48 0a24 24 0 1 0 -48 0Z', ty: 9 },
+  { name: 'Blue square', glyph: '■', color: '#1c7ed6', ink: '#ffffff', d: 'M-22 -22H22V22H-22Z', ty: 9 },
+  { name: 'Yellow triangle', glyph: '▲', color: '#fab005', ink: '#1b1b1b', d: 'M0 -29L30 23H-30Z', ty: 15 },
+  { name: 'Green diamond', glyph: '◆', color: '#2f9e44', ink: '#ffffff', d: 'M0 -31L30 0L0 31L-30 0Z', ty: 9 }
+];
+// Boards are pure data: { ladders:{bottom:top}, snakes:{head:tail} }
+const CLASSIC = { id: 'classic', name: 'Classic Route',
+  ladders: { 3: 22, 8: 30, 20: 41, 28: 76, 37: 58, 51: 67, 63: 83, 71: 91 },
+  snakes: { 32: 10, 48: 26, 62: 18, 74: 53, 88: 49, 93: 69, 96: 75, 99: 78 } };
+const rowOf = n => Math.floor((n - 1) / 10);
+function validateBoard(b) {
+  const seen = new Set();
+  const L = Object.entries(b.ladders).map(([a, c]) => [+a, +c]), S = Object.entries(b.snakes).map(([a, c]) => [+a, +c]);
+  for (const [a, c] of L) { if (a < 2 || c > 99 || c <= a || rowOf(c) <= rowOf(a) || seen.has(a) || seen.has(c)) return false; seen.add(a); seen.add(c); }
+  for (const [a, c] of S) { if (a > 99 || c < 2 || c >= a || rowOf(a) <= rowOf(c) || seen.has(a) || seen.has(c)) return false; seen.add(a); seen.add(c); }
+  return true;
+}
+/* Seeded, reproducible, balanced board generator for Wild Board mode. */
+function generateWild(seedStr) {
+  const base = hashSeed(seedStr || 'WILD');
+  for (let attempt = 0; attempt < 300; attempt++) {
+    const rnd = mulberry32(base + attempt * 7919), used = new Set(), ladders = {}, snakes = {};
+    const pick = (lo, hi) => lo + Math.floor(rnd() * (hi - lo + 1));
+    const nL = pick(7, 9), nS = pick(8, 10);
+    let tries = 0;
+    while (Object.keys(ladders).length < nL && tries++ < 600) {
+      const a = pick(2, 82), b = a + pick(9, 56);
+      if (b > 99 || rowOf(b) - rowOf(a) < 1 || used.has(a) || used.has(b)) continue;
+      ladders[a] = b; used.add(a); used.add(b);
+    }
+    tries = 0;
+    while (Object.keys(snakes).length < nS && tries++ < 900) {
+      const hd = pick(14, 99), tl = hd - pick(9, 58);
+      if (tl < 2 || rowOf(hd) - rowOf(tl) < 1 || used.has(hd) || used.has(tl)) continue;
+      snakes[hd] = tl; used.add(hd); used.add(tl);
+    }
+    const heads = Object.keys(snakes).map(Number), gain = Object.entries(ladders).reduce((t, [a, b]) => t + b - a, 0), loss = Object.entries(snakes).reduce((t, [a, b]) => t + a - b, 0);
+    const board = { id: 'wild', name: 'Wild Board', ladders, snakes, seed: seedStr };
+    if (Object.keys(ladders).length >= 6 && heads.length >= 7 && heads.filter(x => x >= 94).length <= 2 && loss > 0 && gain / loss > 0.85 && gain / loss < 1.35 && validateBoard(board)) return board;
+  }
+  return { ...CLASSIC, id: 'wild', name: 'Wild Board', seed: seedStr };
+}
+
+let settings = sanitizeSettings(Store.get('settings', null));
+let profile = sanitizeProfile(Store.get('profile', null));
+const saveSettings = () => Store.set('settings', settings);
+const saveProfile = () => Store.set('profile', profile);
+const mqRM = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+const reducedMotion = () => settings.motion === 'reduce' || (settings.motion === 'auto' && mqRM.matches);
+function isUnlocked(id) {
+  const u = THEMES[id].unlock;
+  if (!u) return true;
+  return u.type === 'matches' ? profile.matches >= u.n : profile.humanWins >= u.n;
+}
+function unlockText(id) {
+  const u = THEMES[id].unlock;
+  if (!u) return '';
+  return u.type === 'matches' ? `Play ${plural(u.n, 'match', 'matches')} (${Math.min(profile.matches, u.n)}/${u.n})` : `Win ${plural(u.n, 'match', 'matches')} (${Math.min(profile.humanWins, u.n)}/${u.n})`;
+}
+
+/* ---------- 6. ENGINE (pure rules, no DOM) ---------- */
+const Dice = {
+  forced: [],
+  roll() { if (DEBUG && this.forced.length) return clamp(Math.floor(this.forced.shift()), 1, 6); return secureInt(6) + 1; }
+};
+const Engine = {
+  /* Resolve one roll for a piece on `pos`. Returns every fact the UI needs. */
+  resolve(board, rules, pos, roll) {
+    const FIN = CFG.size, out = { roll, from: pos, steps: [], blocked: false, bounced: false, landing: pos, special: null, final: pos, won: false, need: FIN - pos };
+    if (pos + roll > FIN && rules.finish === 'exact') { out.blocked = true; return out; }
+    let p = pos, dir = 1;
+    for (let i = 0; i < roll; i++) { if (p === FIN) dir = -1; p += dir; out.steps.push(p); }
+    out.bounced = dir === -1; out.landing = p;
+    if (board.ladders[p]) out.special = { type: 'ladder', from: p, to: board.ladders[p] };
+    else if (board.snakes[p]) out.special = { type: 'snake', from: p, to: board.snakes[p] };
+    out.final = out.special ? out.special.to : p;
+    out.won = out.final === FIN;
+    return out;
+  }
+};
+
+/* ---------- 7. SOUND (Web Audio, created lazily after a user gesture) ---------- */
+const Sound = (() => {
+  let ctx = null, master, sfxG, musG, failed = false, musicTimer = 0, root = 0;
+  const SCALE = [0, 2, 4, 7, 9, 12, 14];
+  function init() {
+    if (ctx || failed) return;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) { failed = true; return; }
+      ctx = new AC(); master = ctx.createGain(); master.gain.value = 0.9; master.connect(ctx.destination);
+      sfxG = ctx.createGain(); musG = ctx.createGain(); sfxG.connect(master); musG.connect(master); apply();
+    } catch (e) { failed = true; ctx = null; }
+  }
+  function resume() { init(); if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {}); }
+  function apply() {
+    if (!ctx) return;
+    sfxG.gain.value = settings.sfx ? settings.sfxVol : 0;
+    musG.gain.value = settings.music ? settings.musVol * 0.45 : 0;
+    if (settings.music) startMusic(); else stopMusic();
+  }
+  function tone(o) {
+    if (!ctx) return;
+    const bus = o.music ? musG : sfxG;
+    if (!o.music && !settings.sfx) return;
+    const t0 = ctx.currentTime + (o.delay || 0), dur = o.t || 0.15, osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.type = o.type || 'sine'; osc.frequency.setValueAtTime(o.f, t0);
+    if (o.f2) osc.frequency.exponentialRampToValueAtTime(o.f2, t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(o.v || 0.25, t0 + (o.a || 0.012)); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(g); g.connect(bus); osc.start(t0); osc.stop(t0 + dur + 0.05);
+  }
+  function tick(delay, v) {
+    if (!ctx || !settings.sfx) return;
+    const len = Math.floor(ctx.sampleRate * 0.04), buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+    const src = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    f.type = 'bandpass'; f.frequency.value = 1400 + Math.random() * 1400; g.gain.value = v || 0.5;
+    src.buffer = buf; src.connect(f); f.connect(g); g.connect(sfxG); src.start(ctx.currentTime + delay);
+  }
+  const FX = {
+    click: () => tone({ f: 660, f2: 880, t: .07, type: 'triangle', v: .18 }),
+    roll: () => { for (let i = 0; i < 7; i++) tick(i * 0.075, 0.55); tone({ f: 120, f2: 70, t: .25, type: 'sine', v: .3 }); },
+    land: () => tone({ f: 260, f2: 130, t: .16, type: 'square', v: .12 }),
+    step: i => tone({ f: 330 * Math.pow(2, Math.min(i, 10) / 12), t: .09, type: 'triangle', v: .16 }),
+    ladder: () => [523, 659, 784, 1047, 1319].forEach((f, i) => tone({ f, t: .16, type: 'sine', v: .2, delay: i * .075 })),
+    snake: () => { tone({ f: 620, f2: 110, t: .8, type: 'sawtooth', v: .12 }); tone({ f: 310, f2: 70, t: .8, type: 'triangle', v: .18, delay: .05 }); },
+    bonus: () => { tone({ f: 784, t: .12, type: 'square', v: .1 }); tone({ f: 1047, t: .18, type: 'square', v: .1, delay: .1 }); },
+    error: () => tone({ f: 170, f2: 120, t: .18, type: 'sawtooth', v: .12 }),
+    turn: () => tone({ f: 523, t: .08, type: 'sine', v: .12 }),
+    win: () => { [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => tone({ f, t: .26, type: 'triangle', v: .22, delay: i * .12 })); [262, 392, 523].forEach(f => tone({ f, t: 1.3, type: 'sine', v: .12, delay: .8 })); }
+  };
+  function startMusic() {
+    if (musicTimer || !ctx) return;
+    const note = () => {
+      if (!settings.music || document.hidden || !ctx) return;
+      const semi = SCALE[secureInt(SCALE.length)] + root, f = 261.63 * Math.pow(2, semi / 12);
+      tone({ f, t: 1.9, type: 'triangle', v: .13, a: .25, music: true });
+      if (secureInt(4) === 0) tone({ f: f / 2, t: 3, type: 'sine', v: .12, a: .6, music: true });
+    };
+    note(); musicTimer = setInterval(note, 1150);
+  }
+  function stopMusic() { if (musicTimer) { clearInterval(musicTimer); musicTimer = 0; } }
+  return {
+    resume, apply, setRoot(n) { root = n; },
+    play(name, arg) { try { if (!ctx) return; const f = FX[name]; if (f) f(arg); } catch (e) { /* audio must never break gameplay */ } },
+    buzz(p) { try { if (settings.haptics && navigator.vibrate) navigator.vibrate(p); } catch (e) { /* unsupported */ } }
+  };
+})();
+
+/* ---------- 8. SCOPE: cancellable tweens & timers. Cancelling a scope silently
+   drops every pending continuation, so stale callbacks can never mutate a newer match. ---------- */
+class Scope {
+  constructor() { this.jobs = new Set(); this.timers = new Set(); this.dead = false; }
+  tween(ms, fn) {
+    return new Promise(resolve => {
+      if (this.dead) return;
+      const job = { id: 0 }; this.jobs.add(job);
+      const t0 = performance.now();
+      const step = now => {
+        const t = ms <= 0 ? 1 : clamp((now - t0) / ms, 0, 1);
+        fn(t);
+        if (t < 1) job.id = requestAnimationFrame(step); else { this.jobs.delete(job); resolve(); }
+      };
+      job.id = requestAnimationFrame(step);
+    });
+  }
+  sleep(ms) { return new Promise(resolve => { this.after(ms, resolve); }); }
+  after(ms, fn) {
+    if (this.dead) return null;
+    const job = { id: 0 }; this.timers.add(job);
+    job.id = setTimeout(() => { this.timers.delete(job); if (!this.dead) fn(); }, Math.max(0, ms));
+    return job;
+  }
+  clear(job) { if (job) { clearTimeout(job.id); this.timers.delete(job); } }
+  cancel() { this.dead = true; this.jobs.forEach(j => cancelAnimationFrame(j.id)); this.timers.forEach(j => clearTimeout(j.id)); this.jobs.clear(); this.timers.clear(); }
+}
+
+/* ---------- 9. SCENE: procedural themed background (cached bitmap + capped particles) ---------- */
+const Scene = (() => {
+  const cv = q('#bg'), cx = cv.getContext('2d');
+  let cache = null, W = 0, H = 0, dpr = 1, parts = [], raf = 0, last = 0, tid = 'sunset';
+  function ridge(c, w, hh, y, amp, col, rnd, step, mesa) {
+    c.fillStyle = col; c.beginPath(); c.moveTo(0, hh);
+    let x = 0, hgt = rnd() * amp; c.lineTo(0, y - hgt);
+    while (x < w) {
+      const wd = step * (0.6 + rnd() * 1.2), nh = rnd() * amp;
+      if (mesa) { c.lineTo(x + wd * 0.1, y - hgt); c.lineTo(x + wd * 0.2, y - nh); c.lineTo(x + wd, y - nh); } else c.lineTo(x + wd, y - nh);
+      hgt = nh; x += wd;
+    }
+    c.lineTo(w, hh); c.closePath(); c.fill();
+  }
+  function pines(c, w, y, n, sz, col, rnd) {
+    c.fillStyle = col;
+    for (let i = 0; i < n; i++) {
+      const x = rnd() * w, z = sz * (0.6 + rnd() * 0.8);
+      for (let k = 0; k < 3; k++) { const wd = z * (1 - k * 0.22), top = y - z * 1.7 + k * z * 0.5; c.beginPath(); c.moveTo(x, top - z * 0.2); c.lineTo(x + wd * 0.5, top + z * 0.9); c.lineTo(x - wd * 0.5, top + z * 0.9); c.closePath(); c.fill(); }
+      c.fillRect(x - z * 0.06, y - z * 0.1, z * 0.12, z * 0.3);
+    }
+  }
+  function stars(c, w, hh, n, rnd, maxY) { c.fillStyle = '#fff'; for (let i = 0; i < n; i++) { c.globalAlpha = 0.3 + rnd() * 0.7; c.beginPath(); c.arc(rnd() * w, rnd() * hh * maxY, 0.4 + rnd() * 1.3, 0, 7); c.fill(); } c.globalAlpha = 1; }
+  function orb(c, x, y, r, inner, outer) {
+    const g = c.createRadialGradient(x, y, r * 0.1, x, y, r * 2.6); g.addColorStop(0, inner); g.addColorStop(0.35, outer); g.addColorStop(1, 'rgba(0,0,0,0)');
+    c.fillStyle = g; c.beginPath(); c.arc(x, y, r * 2.6, 0, 7); c.fill(); c.fillStyle = inner; c.beginPath(); c.arc(x, y, r, 0, 7); c.fill();
+  }
+  function city(c, w, hh, base, minH, maxH, col, rnd, lit) {
+    let x = -10;
+    while (x < w) {
+      const bw = 26 + rnd() * 54, bh = minH + rnd() * (maxH - minH);
+      c.fillStyle = col; c.fillRect(x, base - bh, bw, hh);
+      if (lit) for (let wy = base - bh + 10; wy < base - 8; wy += 14) for (let wx = x + 6; wx < x + bw - 8; wx += 12) if (rnd() < 0.33) { c.fillStyle = lit[(rnd() * lit.length) | 0]; c.globalAlpha = 0.75; c.fillRect(wx, wy, 5, 7); c.globalAlpha = 1; }
+      x += bw + rnd() * 6;
+    }
+  }
+  const SCENES = {
+    sunset(c, w, hh, rnd) {
+      orb(c, w * 0.72, hh * 0.56, Math.min(w, hh) * 0.1, '#ffe3a3', 'rgba(255,150,90,.55)');
+      ridge(c, w, hh, hh * 0.72, hh * 0.16, '#5b1f5e', rnd, 90, true); ridge(c, w, hh, hh * 0.8, hh * 0.13, '#3d1450', rnd, 70, true); ridge(c, w, hh, hh * 0.88, hh * 0.1, '#240c3a', rnd, 60, true);
+      c.fillStyle = '#120818'; c.fillRect(0, hh * 0.94, w, hh * 0.06); c.fillStyle = '#ffd166'; for (let x = 0; x < w; x += 90) c.fillRect(x, hh * 0.968, 44, 4);
+      c.fillStyle = '#14061f';
+      for (let i = 0; i < 7; i++) { const x = rnd() * w, g = 30 + rnd() * 40, y = hh * 0.94; c.fillRect(x, y - g, 8, g); c.fillRect(x - 12, y - g * 0.7, 6, g * 0.3); c.fillRect(x - 12, y - g * 0.7, 12, 5); c.fillRect(x + 14, y - g * 0.55, 6, g * 0.3); c.fillRect(x + 8, y - g * 0.55, 12, 5); }
+    },
+    park(c, w, hh, rnd) {
+      stars(c, w, hh, 70, rnd, 0.5); orb(c, w * 0.2, hh * 0.18, 26, '#f4f8e0', 'rgba(220,255,200,.3)');
+      ridge(c, w, hh, hh * 0.64, hh * 0.22, '#0d4a4a', rnd, 120, false); ridge(c, w, hh, hh * 0.74, hh * 0.16, '#0a3a40', rnd, 90, false);
+      pines(c, w, hh * 0.88, Math.round(w / 38), 42, '#06231f', rnd); pines(c, w, hh * 0.99, Math.round(w / 30), 64, '#04181a', rnd);
+    },
+    neon(c, w, hh, rnd) {
+      stars(c, w, hh, 50, rnd, 0.5); orb(c, w * 0.5, hh * 0.4, Math.min(w, hh) * 0.11, '#ffd1f4', 'rgba(255,79,216,.45)');
+      city(c, w, hh, hh * 0.86, hh * 0.1, hh * 0.38, '#12123a', rnd, ['#3be8ff', '#ff4fd8', '#ffd84f']);
+      city(c, w, hh, hh * 0.97, hh * 0.05, hh * 0.24, '#080920', rnd, ['#3be8ff', '#ff4fd8']);
+      c.fillStyle = 'rgba(59,232,255,.5)'; c.fillRect(0, hh * 0.985, w, 3);
+    },
+    frost(c, w, hh, rnd) {
+      const cols = ['rgba(120,255,200,.22)', 'rgba(140,180,255,.2)', 'rgba(200,140,255,.16)'];
+      for (let k = 0; k < 3; k++) {
+        const y0 = hh * (0.12 + k * 0.09), g = c.createLinearGradient(0, y0 - 60, 0, y0 + 120);
+        g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.5, cols[k]); g.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g; c.beginPath(); c.moveTo(0, y0 + 120);
+        for (let x = 0; x <= w; x += 40) c.lineTo(x, y0 + Math.sin(x * 0.004 + k * 2) * 40 + Math.sin(x * 0.011 + k) * 18);
+        c.lineTo(w, y0 + 120); c.closePath(); c.fill();
+      }
+      stars(c, w, hh, 60, rnd, 0.4); ridge(c, w, hh, hh * 0.7, hh * 0.2, '#7fa9d1', rnd, 130, false); ridge(c, w, hh, hh * 0.8, hh * 0.14, '#a9cfe9', rnd, 100, false);
+      pines(c, w, hh * 0.9, Math.round(w / 45), 40, '#0b2f4d', rnd); c.fillStyle = '#eaf6ff'; c.beginPath(); c.ellipse(w * 0.3, hh * 1.02, w * 0.6, hh * 0.1, 0, 0, 7); c.ellipse(w * 0.85, hh * 1.03, w * 0.5, hh * 0.09, 0, 0, 7); c.fill();
+    },
+    coast(c, w, hh, rnd) {
+      const hz = hh * 0.56; orb(c, w * 0.62, hz - 10, Math.min(w, hh) * 0.08, '#fff3c8', 'rgba(255,190,120,.55)');
+      const g = c.createLinearGradient(0, hz, 0, hh); g.addColorStop(0, '#0f86a8'); g.addColorStop(1, '#082f52'); c.fillStyle = g; c.fillRect(0, hz, w, hh - hz);
+      for (let i = 0; i < 14; i++) { c.fillStyle = 'rgba(255,230,170,' + (0.32 - i * 0.02) + ')'; const bw = (80 - i * 4) + rnd() * 20; c.fillRect(w * 0.62 - bw / 2, hz + 4 + i * 11, bw, 3); }
+      c.fillStyle = 'rgba(255,255,255,.12)'; for (let i = 0; i < 40; i++) c.fillRect(rnd() * w, hz + 10 + rnd() * (hh - hz), 30 + rnd() * 60, 2);
+      const deck = hh * 0.66, R = Math.min(w, hh) * 0.12, cxw = w * 0.2, cyw = deck - R - 18;
+      c.strokeStyle = '#07202f'; c.fillStyle = '#07202f'; c.lineWidth = 3; c.beginPath(); c.arc(cxw, cyw, R, 0, 7); c.stroke(); c.beginPath(); c.arc(cxw, cyw, R * 0.6, 0, 7); c.stroke();
+      for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; c.beginPath(); c.moveTo(cxw, cyw); c.lineTo(cxw + Math.cos(a) * R, cyw + Math.sin(a) * R); c.stroke(); c.beginPath(); c.arc(cxw + Math.cos(a) * R, cyw + Math.sin(a) * R, 5, 0, 7); c.fill(); }
+      c.beginPath(); c.moveTo(cxw, cyw); c.lineTo(cxw - R * 0.5, deck); c.moveTo(cxw, cyw); c.lineTo(cxw + R * 0.5, deck); c.stroke();
+      c.fillRect(0, deck, w * 0.46, 10); for (let x = 6; x < w * 0.46; x += 24) c.fillRect(x, deck, 5, hh * 0.1);
+    }
+  };
+  function drawScene(c, w, hh, id) {
+    const th = THEMES[id], rnd = mulberry32(hashSeed(id)), g = c.createLinearGradient(0, 0, 0, hh);
+    th.sky.forEach(st => g.addColorStop(st[0], st[1])); c.fillStyle = g; c.fillRect(0, 0, w, hh); SCENES[id](c, w, hh, rnd);
+  }
+  function initParts() {
+    const P = THEMES[tid].parts, rnd = mulberry32(hashSeed('p' + tid)), n = Math.min(CFG.particles.bg, W < 600 ? 24 : 42);
+    parts = Array.from({ length: n }, () => ({ x: rnd() * W, y: rnd() * H, vx: P.vx * (0.4 + rnd() * 0.8), vy: P.vy * (0.5 + rnd()), r: P.r[0] + rnd() * (P.r[1] - P.r[0]), ph: rnd() * 6, ts: 1 + rnd() * 2 }));
+  }
+  function paint(dt) {
+    if (!cache) return;
+    cx.setTransform(1, 0, 0, 1, 0, 0); cx.drawImage(cache, 0, 0); cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const P = THEMES[tid].parts;
+    for (const p of parts) {
+      p.x += p.vx * dt; p.y += p.vy * dt; p.ph += dt * p.ts;
+      if (p.x > W + 5) p.x = -5; else if (p.x < -5) p.x = W + 5;
+      if (p.y > H + 5) p.y = -5; else if (p.y < -5) p.y = H + 5;
+      const a = P.tw ? P.a * (0.3 + 0.7 * Math.abs(Math.sin(p.ph))) : P.a;
+      cx.fillStyle = 'rgba(' + P.col + ',' + a.toFixed(2) + ')';
+      if (P.streak) cx.fillRect(p.x, p.y, 1.2, Math.abs(p.vy) * 0.07); else { cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, 7); cx.fill(); }
+    }
+  }
+  function build() {
+    dpr = Math.min(2, window.devicePixelRatio || 1); W = window.innerWidth; H = window.innerHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    cache = document.createElement('canvas'); cache.width = cv.width; cache.height = cv.height;
+    const c = cache.getContext('2d'); c.scale(dpr, dpr); drawScene(c, W, H, tid); initParts(); paint(0);
+  }
+  function loop(t) {
+    raf = 0;
+    if (!shouldRun()) return;
+    if (t - last >= 33) { paint(Math.min(0.1, (t - last) / 1000)); last = t; }
+    raf = requestAnimationFrame(loop);
+  }
+  const shouldRun = () => !document.hidden && !reducedMotion();
+  function sync() { if (shouldRun()) { if (!raf) { last = performance.now(); raf = requestAnimationFrame(loop); } } else if (raf) { cancelAnimationFrame(raf); raf = 0; paint(0); } }
+  let rt = 0;
+  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { build(); sync(); }, 150); });
+  return { setTheme(id) { if (THEMES[id] && (id !== tid || !cache)) { tid = id; build(); sync(); } }, sync };
+})();
+
+/* ---------- 10. CONFETTI (hard-capped, self-terminating) ---------- */
+const Confetti = (() => {
+  const cv = q('#fx'), cx = cv.getContext('2d');
+  let ps = [], raf = 0, W = 0, H = 0, dpr = 1, last = 0;
+  const COLORS = ['#e63946', '#ffffff', '#1d4ed8', '#ffd23f', '#f4a261', '#48d597'];
+  function size() { dpr = Math.min(2, window.devicePixelRatio || 1); W = window.innerWidth; H = window.innerHeight; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+  window.addEventListener('resize', size); size();
+  function loop(t) {
+    const dt = Math.min(0.05, (t - last) / 1000); last = t;
+    cx.setTransform(dpr, 0, 0, dpr, 0, 0); cx.clearRect(0, 0, W, H);
+    ps = ps.filter(p => p.age < p.life && p.y < H + 30);
+    for (const p of ps) {
+      p.age += dt; p.vy += 520 * dt; p.vx *= 0.995; p.x += p.vx * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
+      cx.save(); cx.translate(p.x, p.y); cx.rotate(p.rot); cx.globalAlpha = clamp(1 - (p.age / p.life - 0.7) / 0.3, 0, 1); cx.fillStyle = p.col; cx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); cx.restore();
+    }
+    if (ps.length) raf = requestAnimationFrame(loop); else { raf = 0; cx.clearRect(0, 0, W, H); }
+  }
+  return {
+    burst(n, x, y, spread, power) {
+      if (reducedMotion() || document.hidden) return;
+      n = Math.min(n, CFG.particles.confetti - ps.length);
+      for (let i = 0; i < n; i++) {
+        const a = -Math.PI / 2 + (Math.random() - 0.5) * (spread || 2.6), v = (power || 520) * (0.4 + Math.random() * 0.8);
+        ps.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, rot: Math.random() * 6, vr: (Math.random() - 0.5) * 14, w: 6 + Math.random() * 6, h: 4 + Math.random() * 6, col: COLORS[(Math.random() * COLORS.length) | 0], age: 0, life: 2.2 + Math.random() * 1.4 });
+      }
+      if (!raf && ps.length) { last = performance.now(); raf = requestAnimationFrame(loop); }
+    },
+    clear() { ps = []; if (raf) cancelAnimationFrame(raf); raf = 0; cx.clearRect(0, 0, W, H); }
+  };
+})();
+
+/* ---------- 11. BOARD VIEW (SVG). Purely presentational: derives everything from logical tile numbers. ---------- */
+/* Serpentine mapping: tile 1 bottom-left, rows alternate direction, 100 top-left. */
+function tileXY(n) {
+  const r = rowOf(n), c0 = (n - 1) % 10, col = r % 2 === 0 ? c0 : 9 - c0;
+  return { x: GEO.m + col * GEO.t + GEO.t / 2, y: GEO.m + (9 - r) * GEO.t + GEO.t / 2 };
+}
+const SLOT = { 1: [[4, 8]], 2: [[-19, 10], [27, 10]], 3: [[-19, 0], [27, 0], [4, 28]], 4: [[-19, 0], [27, 0], [-19, 28], [27, 28]] };
+const SLOT_SCALE = { 1: 0.98, 2: 0.78, 3: 0.66, 4: 0.62 };
+
+function pieceShapes(def, outline) {
+  return [s('path', { d: def.d, fill: 'none', stroke: '#10141f', 'stroke-width': outline || 11, 'stroke-linejoin': 'round' }),
+    s('path', { d: def.d, fill: def.color, stroke: '#fff', 'stroke-width': 4, 'stroke-linejoin': 'round' })];
+}
+function pieceNumber(def, n) { const t = s('text', { class: 'pnum', x: 0, y: def.ty, fill: def.ink }); t.textContent = n; return t; }
+function pieceIcon(pieceIdx, size) {
+  const def = PIECES[pieceIdx], el = s('svg', { viewBox: '-38 -38 76 76', width: size, height: size, 'aria-hidden': 'true', focusable: 'false' }, pieceShapes(def, 9), pieceNumber(def, pieceIdx + 1));
+  el.style.flex = 'none'; return el;
+}
+function starPoints(cx, cy, R, r) { let o = []; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rad = i % 2 ? r : R; o.push((cx + Math.cos(a) * rad).toFixed(1) + ',' + (cy + Math.sin(a) * rad).toFixed(1)); } return o.join(' '); }
+
+function makeLadder(a, b, th) {
+  const A = tileXY(a), B = tileXY(b), dx = B.x - A.x, dy = B.y - A.y, len = Math.hypot(dx, dy), ux = dx / len, uy = dy / len, nx = -uy, ny = ux, pad = 14, off = 15;
+  const sx = A.x + ux * pad, sy = A.y + uy * pad, ex = B.x - ux * pad, ey = B.y - uy * pad, g = s('g', { class: 'ladder' });
+  const line = (x1, y1, x2, y2, stroke, w) => s('line', { x1: x1.toFixed(1), y1: y1.toFixed(1), x2: x2.toFixed(1), y2: y2.toFixed(1), stroke, 'stroke-width': w, 'stroke-linecap': 'round' });
+  const count = Math.max(3, Math.floor(len / 36)), rungs = [];
+  for (let i = 1; i <= count; i++) { const t = i / (count + 1), px = lerp(sx, ex, t), py = lerp(sy, ey, t); rungs.push([px + nx * off, py + ny * off, px - nx * off, py - ny * off]); }
+  [1, -1].forEach(k => g.append(line(sx + nx * off * k, sy + ny * off * k, ex + nx * off * k, ey + ny * off * k, th.ladder.edge, 12)));
+  rungs.forEach(r => g.append(line(r[0], r[1], r[2], r[3], th.ladder.edge, 9)));
+  [1, -1].forEach(k => g.append(line(sx + nx * off * k, sy + ny * off * k, ex + nx * off * k, ey + ny * off * k, th.ladder.rail, 6.5)));
+  rungs.forEach(r => g.append(line(r[0], r[1], r[2], r[3], th.ladder.rung, 4.5)));
+  return { el: g, pts: [A, B] };
+}
+function makeSnake(head, tail, idx, th) {
+  const Hd = tileXY(head), T = tileXY(tail), dx = T.x - Hd.x, dy = T.y - Hd.y, len = Math.hypot(dx, dy), ux = dx / len, uy = dy / len, nx = -uy, ny = ux;
+  const waves = Math.max(2, Math.round(len / 140)), amp = Math.min(36, 14 + len / 22), ph = idx % 2 ? 1 : -1, N = clamp(Math.round(len / 12), 24, 56);
+  const col = th.snakes[idx % th.snakes.length], pts = [], wd = [];
+  for (let i = 0; i <= N; i++) {
+    const t = i / N, env = Math.pow(Math.sin(Math.PI * t), 0.6), w = Math.sin(t * Math.PI * 2 * waves) * amp * env * ph;
+    pts.push({ x: Hd.x + dx * t + nx * w, y: Hd.y + dy * t + ny * w }); wd.push(lerp(17, 3.5, Math.pow(t, 0.75)));
+  }
+  const Lp = [], Rp = [];
+  for (let i = 0; i <= N; i++) {
+    const a = pts[Math.max(0, i - 1)], b = pts[Math.min(N, i + 1)]; let tx = b.x - a.x, ty = b.y - a.y; const tl = Math.hypot(tx, ty) || 1; tx /= tl; ty /= tl;
+    Lp.push([pts[i].x - ty * wd[i], pts[i].y + tx * wd[i]]); Rp.push([pts[i].x + ty * wd[i], pts[i].y - tx * wd[i]]);
+  }
+  const poly = Lp.concat(Rp.reverse()), d = 'M' + poly.map(p => p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('L') + 'Z';
+  const g = s('g', { class: 'snake' });
+  g.append(s('path', { d, fill: col, stroke: th.snakeEdge, 'stroke-width': 4, 'stroke-linejoin': 'round' }));
+  for (let i = 3; i < N - 1; i += 3) g.append(s('circle', { cx: pts[i].x.toFixed(1), cy: pts[i].y.toFixed(1), r: (wd[i] * 0.42).toFixed(1), fill: 'rgba(255,255,255,.5)' }));
+  const ang = Math.atan2(pts[0].y - pts[1].y, pts[0].x - pts[1].x) * 180 / Math.PI;
+  const head_ = s('g', { transform: `translate(${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}) rotate(${ang.toFixed(1)})` },
+    s('path', { d: 'M22 0L42 0M42 0L50 -7M42 0L50 7', stroke: '#e11d48', 'stroke-width': 4, fill: 'none', 'stroke-linecap': 'round' }),
+    s('ellipse', { rx: 25, ry: 20, fill: col, stroke: th.snakeEdge, 'stroke-width': 4 }),
+    s('circle', { cx: 9, cy: -10, r: 6.5, fill: '#fff', stroke: th.snakeEdge, 'stroke-width': 2 }), s('circle', { cx: 9, cy: 10, r: 6.5, fill: '#fff', stroke: th.snakeEdge, 'stroke-width': 2 }),
+    s('circle', { cx: 11, cy: -10, r: 3, fill: '#111' }), s('circle', { cx: 11, cy: 10, r: 3, fill: '#111' }));
+  g.append(head_);
+  return { el: g, pts };
+}
+function buildBoard(svgEl, board, th) {
+  svgEl.replaceChildren(); svgEl.setAttribute('viewBox', '0 0 1000 1000'); svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+  const L = {}; ['frame', 'tiles', 'ladders', 'snakes', 'nums', 'hl', 'pieces', 'fx'].forEach(n => { L[n] = s('g', { class: 'L-' + n }); svgEl.append(L[n]); });
+  L.frame.append(s('rect', { x: 3, y: 3, width: 994, height: 994, rx: 34, class: 'b-frame' }), s('rect', { x: 14, y: 14, width: 972, height: 972, rx: 24, class: 'b-inner' }));
+  for (let n = 1; n <= CFG.size; n++) {
+    const c = tileXY(n), x0 = c.x - GEO.t / 2, y0 = c.y - GEO.t / 2, r = rowOf(n), col = r % 2 === 0 ? (n - 1) % 10 : 9 - (n - 1) % 10;
+    const cls = n === 1 ? 't-start' : n === CFG.size ? 't-fin' : ((r + col) % 2 ? 't-b' : 't-a');
+    L.tiles.append(s('rect', { x: x0, y: y0, width: GEO.t, height: GEO.t, class: 'tile ' + cls }));
+    const t = s('text', { x: x0 + 8, y: y0 + 30, class: 'num' }); t.textContent = n; L.nums.append(t);
+    if (board.ladders[n]) { const hnt = s('text', { x: x0 + GEO.t - 8, y: y0 + GEO.t - 9, class: 'hint up' }); hnt.textContent = '▲' + board.ladders[n]; L.nums.append(hnt); }
+    else if (board.snakes[n]) { const hnt = s('text', { x: x0 + GEO.t - 8, y: y0 + GEO.t - 9, class: 'hint down' }); hnt.textContent = '▼' + board.snakes[n]; L.nums.append(hnt); }
+  }
+  const c1 = tileXY(1), c100 = tileXY(CFG.size);
+  const l1 = s('text', { x: c1.x + 6, y: c1.y + GEO.t / 2 - 10, class: 'lbl' }); l1.textContent = 'START'; L.nums.append(l1);
+  const l100 = s('text', { x: c100.x + 6, y: c100.y + GEO.t / 2 - 10, class: 'lbl' }); l100.textContent = 'FINISH'; L.nums.append(l100);
+  L.tiles.append(s('polygon', { points: starPoints(c100.x + 8, c100.y + 2, 24, 10), fill: '#f59f00', stroke: '#7a4a00', 'stroke-width': 3, 'stroke-linejoin': 'round' }));
+  const paths = { ladder: {}, snake: {} };
+  Object.keys(board.ladders).map(Number).sort((a, b) => a - b).forEach(a => { const o = makeLadder(a, board.ladders[a], th); paths.ladder[a] = o; L.ladders.append(o.el); });
+  Object.keys(board.snakes).map(Number).sort((a, b) => a - b).forEach((hd, i) => { const o = makeSnake(hd, board.snakes[hd], i, th); paths.snake[hd] = o; L.snakes.append(o.el); });
+  return { L, paths };
+}
+
+function createBoardView(svgEl, board, theme, scope) {
+  const B = buildBoard(svgEl, board, theme), L = B.L, pieces = [];
+  const view = { svg: svgEl, paths: B.paths, scope, pieces, dur: ms => ms };
+  function place(p, x, y, sc) { p.x = x; p.y = y; p.sc = sc; p.el.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${sc.toFixed(3)})`); }
+  function moveTo(p, x, y, sc, ms) {
+    if (reducedMotion() || ms <= 0) { place(p, x, y, sc); return Promise.resolve(); }
+    const x0 = p.x, y0 = p.y, s0 = p.sc;
+    return scope.tween(ms, t => { const e = easeIO(t); place(p, lerp(x0, x, e), lerp(y0, y, e), lerp(s0, sc, e)); });
+  }
+  view.setPieces = list => {
+    L.pieces.replaceChildren(); pieces.length = 0;
+    list.forEach(pl => {
+      const def = PIECES[pl.piece], el = s('g', { class: 'piece' }, s('circle', { class: 'ring', r: 46 }), s('ellipse', { cx: 0, cy: 30, rx: 24, ry: 7, fill: 'rgba(0,0,0,.35)' }), pieceShapes(def), pieceNumber(def, pl.piece + 1));
+      const p = { el, x: 0, y: 0, sc: 1 }; place(p, -100, -100, 1); pieces.push(p); L.pieces.append(el);
+    });
+  };
+  view.layout = (tiles, animate) => {
+    const groups = new Map(); tiles.forEach((t, i) => { if (!groups.has(t)) groups.set(t, []); groups.get(t).push(i); });
+    const jobs = [];
+    groups.forEach((idxs, t) => {
+      const c = tileXY(t), n = Math.min(idxs.length, 4);
+      idxs.forEach((pi, k) => { const sl = SLOT[n][Math.min(k, 3)]; jobs.push(moveTo(pieces[pi], c.x + sl[0], c.y + sl[1], SLOT_SCALE[n], animate ? view.dur(CFG.anim.settleMs) : 0)); });
+    });
+    return Promise.all(jobs);
+  };
+  view.hopTo = (i, tile, ms) => {
+    const p = pieces[i], c = tileXY(tile), tx = c.x + SLOT[1][0][0], ty = c.y + SLOT[1][0][1], x0 = p.x, y0 = p.y, s0 = p.sc;
+    if (reducedMotion() || ms <= 0) { place(p, tx, ty, SLOT_SCALE[1]); return scope.sleep(ms * 0.6); }
+    return scope.tween(ms, t => { const e = easeIO(t); place(p, lerp(x0, tx, e), lerp(y0, ty, e) - Math.sin(Math.PI * t) * 18, lerp(s0, SLOT_SCALE[1], e)); });
+  };
+  view.travel = (i, pts, ms, bulge) => {      // follow a polyline (ladder or snake body)
+    const p = pieces[i], ox = SLOT[1][0][0], oy = SLOT[1][0][1], cum = [0];
+    for (let k = 1; k < pts.length; k++) cum.push(cum[k - 1] + Math.hypot(pts[k].x - pts[k - 1].x, pts[k].y - pts[k - 1].y));
+    const total = cum[cum.length - 1] || 1, last = pts[pts.length - 1];
+    if (reducedMotion()) { place(p, last.x + ox, last.y + oy, SLOT_SCALE[1]); return scope.sleep(ms * 0.5); }
+    return scope.tween(ms, t => {
+      const d = easeIO(t) * total; let k = 1; while (k < cum.length - 1 && cum[k] < d) k++;
+      const seg = (d - cum[k - 1]) / ((cum[k] - cum[k - 1]) || 1), a = pts[k - 1], b = pts[k];
+      place(p, lerp(a.x, b.x, seg) + ox, lerp(a.y, b.y, seg) + oy, SLOT_SCALE[1] + (bulge || 0) * Math.sin(Math.PI * t));
+    });
+  };
+  view.setActive = i => pieces.forEach((p, k) => p.el.classList.toggle('active', k === i));
+  view.setTarget = n => {
+    L.hl.replaceChildren();
+    if (n) { const c = tileXY(n); L.hl.append(s('rect', { x: c.x - GEO.t / 2 + 3, y: c.y - GEO.t / 2 + 3, width: GEO.t - 6, height: GEO.t - 6, rx: 10, class: 'target' })); }
+  };
+  view.focus = sp => {
+    svgEl.classList.toggle('focus', !!sp);
+    qa('.hot', svgEl).forEach(e => e.classList.remove('hot'));
+    if (sp && view.paths[sp.type][sp.from]) view.paths[sp.type][sp.from].el.classList.add('hot');
+  };
+  view.burst = (x, y, color, n) => {
+    if (reducedMotion()) return;
+    const els = [];
+    for (let k = 0; k < Math.min(n || 14, CFG.particles.burst); k++) {
+      const a = Math.random() * Math.PI * 2, dist = 50 + Math.random() * 70, c = s('circle', { cx: x, cy: y, r: 4 + Math.random() * 5, fill: k % 3 ? color : '#fff', class: 'spark' });
+      c.style.setProperty('--dx', Math.cos(a) * dist + 'px'); c.style.setProperty('--dy', Math.sin(a) * dist + 'px'); L.fx.append(c); els.push(c);
+    }
+    scope.after(950, () => els.forEach(e => e.remove()));
+  };
+  view.floatText = (x, y, text, fill) => {
+    const t = s('text', { x, y, class: 'float', fill: fill || '#fff' }); t.textContent = text; L.fx.append(t); scope.after(1400, () => t.remove());
+  };
+  view.tileCenter = tileXY;
+  return view;
+}
+
+/* Title-screen demo: two pieces play endlessly on the Classic board using the real engine. */
+const Preview = (() => {
+  let scope = null;
+  async function run(sc, v) {
+    const pos = [1, 1]; let who = 0;
+    while (!sc.dead) {
+      await sc.sleep(850);
+      const res = Engine.resolve(CLASSIC, { finish: 'exact' }, pos[who], secureInt(6) + 1);
+      v.setActive(who);
+      if (!res.blocked) {
+        for (const t of res.steps) await v.hopTo(who, t, v.dur(CFG.anim.hopMs));
+        pos[who] = res.landing;
+        if (res.special) { await sc.sleep(220); v.focus(res.special); await v.travel(who, v.paths[res.special.type][res.special.from].pts, v.dur(res.special.type === 'ladder' ? 800 : 950), res.special.type === 'ladder' ? 0.2 : 0); pos[who] = res.special.to; v.focus(null); }
+        await v.layout(pos, true);
+      }
+      if (pos[who] >= CFG.size) { await sc.sleep(900); pos[0] = pos[1] = 1; await v.layout(pos, true); }
+      who = 1 - who;
+    }
+  }
+  return {
+    stop() { if (scope) { scope.cancel(); scope = null; } },
+    start(themeId) {
+      this.stop();
+      const sc = scope = new Scope(), v = createBoardView(q('#preview-svg'), CLASSIC, THEMES[themeId], sc);
+      v.dur = ms => ms * (reducedMotion() ? 0.5 : 0.8);
+      v.setPieces([{ piece: 0 }, { piece: 1 }]); v.layout([1, 1], false); v.setActive(0);
+      run(sc, v);
+    }
+  };
+})();
+
+/* ---------- 12. MATCH CONTROLLER ----------
+   Phases: ready → rolling → moving → special → turnEnd → ready … → victory.
+   Phase is set synchronously before the first await, so rapid clicks can never double-roll.
+   Every match owns a Scope; replacing/cancelling a match drops all of its pending callbacks. */
+let SU = sanitizeSetup(Store.get('setup', null));   // setup screen state (persisted)
+let M = null;                                        // current match
+let bannerT = 0, turnBannerT = 0;
+const ACH = [
+  { id: 'first', name: 'Hit the Road', desc: 'Finish your first match.' },
+  { id: 'sky', name: 'Sky High', desc: 'Climb a ladder of 40+ tiles.' },
+  { id: 'slip', name: 'Slippery Slope', desc: 'Slide down a snake of 40+ tiles.' },
+  { id: 'comeback', name: 'Comeback Kid', desc: 'Win after sliding down 3+ snakes.' },
+  { id: 'quick', name: 'Lightning Round', desc: 'Win a Quick Roll match.' },
+  { id: 'wild', name: 'Wild Child', desc: 'Win on a Wild Board.' },
+  { id: 'patient', name: 'Perfect Landing', desc: 'Win after missing an exact finish or bouncing back.' },
+  { id: 'sixes', name: 'Six Pack', desc: 'Roll three sixes in one match.' },
+  { id: 'streak', name: 'Hat Trick', desc: 'Win three matches in a row.' },
+  { id: 'grand', name: 'Grand Tour', desc: 'Win in three different worlds.' },
+  { id: 'road', name: 'Road Warrior', desc: 'Play 10 matches.' }
+];
+const newStats = () => ({ rolls: 0, sixes: 0, highest: 0, ladders: 0, snakes: 0, climbed: 0, slid: 0, maxClimb: 0, maxSlide: 0, blocked: 0, bounces: 0 });
+const dur = (m, ms) => ms * CFG.speeds[settings.speed] * (CFG.modeSpeed[m.cfg.mode] || 1) * (reducedMotion() ? 0.6 : 1);
+const elapsed = m => m.frozen || document.hidden ? m.elapsedBase : m.elapsedBase + performance.now() - m.seg;
+const dialogOpen = () => !!q('dialog[open]');
+function openDialog(d) { if (d.open) return; try { d.showModal(); } catch (e) { d.setAttribute('open', ''); } }
+function closeDialog(d) { if (d.open) { try { d.close(); } catch (e) { d.removeAttribute('open'); } d.dispatchEvent(new Event('close')); } }
+function closeAllDialogs() { qa('dialog[open]').forEach(closeDialog); }
+function announce(t) { const el = q('#live'); el.textContent = ''; setTimeout(() => { el.textContent = t; }, 40); }
+function toast(title, sub) {
+  const host = q('#toasts'); while (host.children.length >= 3) host.firstChild.remove();
+  const el = h('div', { class: 'toast' }, h('b', { text: title }), sub ? h('small', { text: sub }) : null); host.append(el);
+  setTimeout(() => el.remove(), 4200); announce(title + (sub ? '. ' + sub : ''));
+}
+function award(id, m) {
+  if (profile.achievements[id]) return;
+  const a = ACH.find(x => x.id === id); if (!a) return;
+  profile.achievements[id] = Date.now(); if (m) m.newAch.push(id); saveProfile(); toast('Badge unlocked: ' + a.name, a.desc);
+}
+function applyTheme(id) {
+  const th = THEMES[id]; if (!th) return;
+  Object.entries(th.vars).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
+  const meta = q('meta[name="theme-color"]'); if (meta) meta.setAttribute('content', th.sky[0][1]);
+  Scene.setTheme(id); Sound.setRoot(th.root);
+}
+
+/* --- dice widget --- */
+const FACES = { 0: [], 1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8] };
+function buildDie() { const d = q('#die'); d.replaceChildren(...Array.from({ length: 9 }, () => h('i'))); setDie(0); }
+function setDie(v) { const on = FACES[v] || []; qa('#die i').forEach((p, k) => { p.classList.toggle('on', on.includes(k)); p.style.opacity = v === 0 ? '.14' : ''; p.style.transform = v === 0 ? 'none' : ''; }); }
+async function animateDie(m, roll) {
+  const die = q('#die'), rm = reducedMotion();
+  if (!rm) {
+    die.classList.remove('land'); die.classList.add('tumble');
+    const total = dur(m, CFG.anim.diceMs), t0 = performance.now();
+    while (performance.now() - t0 < total) { setDie(1 + secureInt(6)); await m.scope.sleep(70); }
+    die.classList.remove('tumble');
+  } else await m.scope.sleep(150);
+  setDie(roll); Sound.play('land'); Sound.buzz(15);
+  if (!rm) { void die.offsetWidth; die.classList.add('land'); }
+  await m.scope.sleep(dur(m, 180));
+}
+
+/* --- messaging, log, banners --- */
+function setMsg(t) { q('#msg').textContent = t; }
+function say(m, pl, text, o) {
+  o = o || {}; setMsg(text);
+  if (o.log !== false) { m.log.push({ i: pl ? pl.i : -1, piece: pl ? pl.piece : -1, text }); if (m.log.length > CFG.logMax) m.log.shift(); renderLog(m); }
+  if (o.speak !== false) announce(text);
+}
+function renderLog(m) {
+  const ol = q('#log'); ol.replaceChildren();
+  if (!m.log.length) { ol.append(h('li', { class: 'empty', text: 'Rolls and moves will appear here.' })); return; }
+  for (let k = m.log.length - 1; k >= 0; k--) {
+    const e = m.log[k], def = PIECES[e.piece];
+    ol.append(h('li', {}, h('span', { class: 'g', 'aria-hidden': 'true', style: def ? 'color:' + def.color : null, text: def ? def.glyph : '•' }), h('span', { text: e.text })));
+  }
+}
+function banner(kind, text, ms) {
+  const el = q('#event-banner'); el.className = 'event-banner ' + kind; el.textContent = text; void el.offsetWidth; el.classList.add('show');
+  clearTimeout(bannerT); bannerT = setTimeout(() => el.classList.remove('show'), ms || CFG.anim.bannerMs);
+}
+function showTurnBanner(pl) {
+  const el = q('#turn-banner'); el.replaceChildren(pieceIcon(pl.piece, 26), h('span', { class: 'nm', text: `${pl.name}'s turn` })); el.classList.add('show');
+  clearTimeout(turnBannerT); turnBannerT = setTimeout(() => el.classList.remove('show'), 1500);
+}
+function screenPos(tile) { const r = q('#board-svg').getBoundingClientRect(), c = tileXY(tile); return { x: r.left + c.x / GEO.vb * r.width, y: r.top + c.y / GEO.vb * r.height }; }
+
+/* --- HUD sync (model → DOM) --- */
+function buildCards(m) {
+  const host = q('#players'); host.replaceChildren(); m.cards = [];
+  m.players.forEach(p => {
+    const nm = h('span', { class: 'nm', text: p.name }), pos = h('b', { text: String(p.pos) }), fill = h('i'), tag = h('span', { class: 'tag', text: '▶ TURN' });
+    const el = h('div', { class: 'pcard', role: 'group', 'aria-label': `${p.name}, ${PIECES[p.piece].name}${p.type === 'computer' ? ', computer' : ''}` },
+      pieceIcon(p.piece, 40),
+      h('div', { class: 'pinfo' }, h('div', { class: 'pname' }, nm, p.type === 'computer' ? h('span', { class: 'badge', title: 'Computer player', text: 'CPU' }) : null, tag), h('div', { class: 'bar', 'aria-hidden': 'true' }, fill)),
+      h('div', { class: 'ppos' }, h('small', { text: 'Tile' }), pos));
+    host.append(el); m.cards.push({ el, pos, fill, tag });
+  });
+}
+function updateCards(m) {
+  m.players.forEach((p, k) => {
+    const c = m.cards[k], isW = m.winner === p, cur = m.phase !== 'victory' && k === m.current;
+    c.pos.textContent = p.pos; c.fill.style.width = clamp((p.pos - 1) / 99 * 100, 1, 100) + '%';
+    c.el.classList.toggle('current', cur); c.el.classList.toggle('winner', isW);
+    if (cur) c.el.setAttribute('aria-current', 'true'); else c.el.removeAttribute('aria-current');
+    c.tag.textContent = isW ? '★ WINNER' : (p.type === 'human' ? '▶ YOUR TURN' : '▶ PLAYING'); c.tag.style.display = cur || isW ? 'inline-block' : 'none';
+  });
+}
+function updateHeader(m) {
+  const c = m.cfg, bits = [STR.modes[c.mode].name + (c.mode === 'wild' ? ' #' + c.seed : ''), c.finish === 'exact' ? 'Exact finish' : 'Bounce back'];
+  if (c.bonusSix) bits.push('Bonus on six'); bits.push(plural(m.rollCount, 'roll'));
+  q('#g-meta').textContent = bits.join(' · ');
+}
+function updateControls(m) {
+  const b = q('#btn-roll'), pl = m.players[m.current]; let label, on = false;
+  if (m.phase === 'victory') { label = STR.roll.again; on = true; }
+  else if (m.phase === 'ready') { if (pl.type === 'human') { label = STR.roll.ready; on = true; } else label = STR.roll.cpu(pl.name); }
+  else label = m.phase === 'rolling' ? STR.roll.rolling : STR.roll.moving;
+  b.textContent = label; b.setAttribute('aria-disabled', on ? 'false' : 'true'); b.classList.toggle('ready-pulse', on && m.phase === 'ready');
+  document.body.dataset.phase = m.phase;
+  const who = q('#who'), shown = m.winner || pl;
+  who.replaceChildren(pieceIcon(shown.piece, 30), h('span', { class: 'nm', text: m.winner ? `${shown.name} won!` : shown.name }));
+}
+function soundIcon(on) {
+  return s('svg', { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 2.2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true' },
+    s('path', { d: 'M4 9v6h4l5 4V5L8 9H4z', fill: 'currentColor' }), on ? s('path', { d: 'M16.5 8.5c1.6 1.8 1.6 5.2 0 7M19 6c3 3.2 3 8.8 0 12' }) : s('path', { d: 'M17 9l5 6M22 9l-5 6' }));
+}
+function updateSoundBtn() { const b = q('#g-sound'); b.replaceChildren(soundIcon(settings.sfx)); b.setAttribute('aria-pressed', String(settings.sfx)); }
+function updateAll(m) {
+  updateHeader(m); updateCards(m); updateControls(m); updateSoundBtn();
+  q('#board-svg').setAttribute('aria-label', 'Board, tiles 1 to 100. ' + m.players.map(p => `${p.name} on tile ${p.pos}`).join(', ') + '.');
+}
+function tilesOf(m) { return m.players.map(p => p.pos); }
+
+/* --- lifecycle --- */
+function buildCfg(su) {
+  const count = clamp(su.count, CFG.minPlayers, CFG.maxPlayers);
+  return { mode: su.mode, theme: isUnlocked(su.theme) ? su.theme : 'sunset', finish: su.finish, bonusSix: su.bonusSix, randomOrder: su.randomOrder, count,
+    seed: su.mode === 'wild' ? (su.seed || randomSeed()) : '',
+    players: su.players.slice(0, count).map((p, i) => ({ name: cleanName(p.name, p.type === 'computer' ? `Computer ${i + 1}` : `Player ${i + 1}`), type: p.type })) };
+}
+function startMatch(cfg, saved) {
+  if (M) M.scope.cancel();
+  M = null; Preview.stop(); Confetti.clear(); closeAllDialogs(); Coach.hide();
+  q('#event-banner').classList.remove('show'); q('#turn-banner').classList.remove('show');
+  const theme = THEMES[cfg.theme]; applyTheme(cfg.theme);
+  const board = cfg.mode === 'wild' ? generateWild(cfg.seed) : CLASSIC;
+  let players;
+  if (saved) players = saved.players.map((p, i) => ({ ...p, i }));
+  else {
+    const list = cfg.players.map((p, k) => ({ piece: k, name: p.name, type: p.type, pos: 1, stats: newStats() }));
+    if (cfg.randomOrder) shuffle(list);
+    players = list.map((p, i) => ({ ...p, i }));
+  }
+  const scope = new Scope(), view = createBoardView(q('#board-svg'), board, theme, scope);
+  const m = M = { cfg, board, theme, rules: { finish: cfg.finish, bonusSix: cfg.bonusSix }, players, current: saved ? saved.current : 0, phase: 'ready',
+    rollCount: saved ? saved.rollCount : 0, bonusChain: saved ? saved.bonusChain : 0, rolls: saved ? saved.rolls : [], log: saved ? saved.log : [],
+    elapsedBase: saved ? saved.elapsed : 0, seg: performance.now(), frozen: false, scope, view, winner: null, aiJob: null, aiWaiting: false, cards: [], newAch: [] };
+  view.dur = ms => dur(m, ms);
+  view.setPieces(players); view.layout(tilesOf(m), false);
+  buildCards(m); renderLog(m); setDie(0);
+  q('#g-route').textContent = `${theme.start} → ${theme.goal}`;
+  q('#log-wrap').open = window.innerWidth > 900 && window.innerWidth / window.innerHeight > 1;
+  showScreen('game'); updateAll(m);
+  const first = players[m.current];
+  if (saved) say(m, null, `Welcome back! ${first.name} is up next.`, { log: false });
+  else {
+    say(m, first, STR.start(first.name, theme.goal));
+    if (cfg.randomOrder) say(m, null, STR.order(players.map(p => p.name)), { speak: false });
+    saveMatch(m);
+  }
+  beginTurnUI(m, true);
+  if (!saved && !profile.tutorialDone && players.some(p => p.type === 'human')) Coach.start();
+  maybeAI(m);
+}
+function beginTurnUI(m, showBanner) {
+  const pl = m.players[m.current];
+  m.view.setActive(m.current); updateAll(m);
+  const msg = pl.type === 'human' ? STR.yourTurn(pl.name) : STR.cpuTurn(pl.name);
+  setMsg(msg); if (m.rollCount > 0 || showBanner) announce(msg);
+  if (showBanner && m.players.length > 1) showTurnBanner(pl);
+}
+function clearAI(m) { if (m.aiJob) { m.scope.clear(m.aiJob); m.aiJob = null; } m.aiWaiting = false; }
+function maybeAI(m) {            // computers use the same fair dice; only their pacing differs
+  if (M !== m || m.phase !== 'ready' || m.aiJob) return;
+  if (m.players[m.current].type !== 'computer') return;
+  m.aiJob = m.scope.after(dur(m, CFG.anim.thinkMs) + secureInt(260), () => { m.aiJob = null; if (dialogOpen()) { m.aiWaiting = true; return; } takeTurn(); });
+}
+function onRollRequest() {
+  const m = M; if (!m) return;
+  if (m.phase === 'victory') { Sound.resume(); Sound.play('click'); startMatch(m.cfg); return; }
+  if (m.phase !== 'ready') return;
+  if (m.players[m.current].type !== 'human') { Sound.resume(); Sound.play('error'); return; }
+  takeTurn();
+}
+function takeTurn() {
+  const m = M;
+  if (!m || m.phase !== 'ready' || dialogOpen()) return;
+  return runTurn(m).catch(err => {            // never leave the game stuck in a non-ready phase
+    console.error(err);
+    if (M === m && m.phase !== 'victory') { m.view.focus(null); m.view.setTarget(null); m.view.layout(tilesOf(m), false); m.phase = 'ready'; m.aiJob = null; updateAll(m); maybeAI(m); }
+  });
+}
+async function runTurn(m) {
+  const pl = m.players[m.current];
+  m.phase = 'rolling'; clearAI(m); updateControls(m);          // synchronous lock
+  Sound.resume(); Sound.play('roll');
+  const roll = Dice.roll();
+  await animateDie(m, roll);
+  pl.stats.rolls++; pl.stats.highest = Math.max(pl.stats.highest, roll); if (roll === 6) pl.stats.sixes++;
+  m.rollCount++; m.rolls.push(roll); updateHeader(m);
+  await playResolution(m, pl, Engine.resolve(m.board, m.rules, pl.pos, roll));
+}
+async function playResolution(m, pl, res) {
+  const v = m.view, sc = m.scope, i = pl.i, rolledTxt = STR.rolled(pl.name, res.roll);
+  if (res.blocked) {
+    pl.stats.blocked++; say(m, pl, `${rolledTxt} ${STR.needExact(pl.name, res.need, pl.pos)}`); banner('info', STR.banner.exact); Sound.play('error');
+    await sc.sleep(dur(m, 750)); return endTurn(m, pl, res);
+  }
+  m.phase = 'moving'; updateControls(m); setMsg(rolledTxt); v.setTarget(res.landing);
+  const hop = res.steps.length >= 5 ? CFG.anim.hopMs * 0.8 : CFG.anim.hopMs;
+  for (let k = 0; k < res.steps.length; k++) { Sound.play('step', k); await v.hopTo(i, res.steps[k], dur(m, hop)); }
+  pl.pos = res.landing; v.setTarget(null); updateCards(m);
+  if (res.bounced) { pl.stats.bounces++; banner('info', STR.banner.bounce); }
+  if (!res.special) {
+    await v.layout(tilesOf(m), true);
+    say(m, pl, `${rolledTxt} ${res.bounced ? STR.bounce(pl.name, res.landing) : STR.moved(pl.name, res.landing)}`);
+    if (res.won) return finishMatch(m, pl);
+    return endTurn(m, pl, res);
+  }
+  const sp = res.special, diff = Math.abs(sp.to - sp.from), isL = sp.type === 'ladder';
+  m.phase = 'special'; updateControls(m); v.focus(sp);
+  say(m, pl, `${rolledTxt} ${isL ? STR.ladder(pl.name, sp.from, sp.to) : STR.snake(pl.name, sp.from, sp.to)}`);
+  banner(isL ? 'up' : 'down', isL ? STR.banner.ladder(diff) : STR.banner.snake(diff));
+  await sc.sleep(dur(m, 380));
+  const human = pl.type === 'human';
+  if (isL) {
+    pl.stats.ladders++; pl.stats.climbed += diff; pl.stats.maxClimb = Math.max(pl.stats.maxClimb, diff); if (human && diff >= CFG.bigJump) award('sky', m);
+    Sound.play('ladder'); Sound.buzz([30, 40, 30]);
+    await v.travel(i, v.paths.ladder[sp.from].pts, dur(m, CFG.anim.ladderMs * (diff >= CFG.bigJump ? 1.15 : 1)), 0.22);
+  } else {
+    pl.stats.snakes++; pl.stats.slid += diff; pl.stats.maxSlide = Math.max(pl.stats.maxSlide, diff); if (human && diff >= CFG.bigJump) award('slip', m);
+    Sound.play('snake'); Sound.buzz(70);
+    await v.travel(i, v.paths.snake[sp.from].pts, dur(m, CFG.anim.snakeMs), -0.12);
+  }
+  pl.pos = sp.to; v.focus(null);
+  const c = v.tileCenter(sp.to); v.burst(c.x, c.y, isL ? '#48d597' : '#ff6b6b', isL ? 18 : 12); v.floatText(c.x, c.y - 30, (isL ? '+' : '−') + diff, isL ? '#8bf5b9' : '#ffb3b3');
+  if (isL && diff >= CFG.bigJump) { const sp2 = screenPos(sp.to); Confetti.burst(36, sp2.x, sp2.y, 3.6, 480); }
+  await v.layout(tilesOf(m), true); updateAll(m);
+  if (res.won) return finishMatch(m, pl);
+  return endTurn(m, pl, res);
+}
+async function endTurn(m, pl, res) {
+  m.phase = 'turnEnd'; updateControls(m);
+  const bonus = !res.blocked && m.rules.bonusSix && res.roll === 6 && m.bonusChain < CFG.bonusSixMaxChain;
+  let next = false;
+  if (bonus) { m.bonusChain++; say(m, pl, STR.bonus(pl.name)); banner('info', STR.banner.bonus); Sound.play('bonus'); }
+  else { m.bonusChain = 0; m.current = (m.current + 1) % m.players.length; next = true; }
+  await m.scope.sleep(dur(m, CFG.anim.turnGapMs + (bonus ? 350 : 0)));
+  m.phase = 'ready'; saveMatch(m); beginTurnUI(m, next);
+  if (next && m.players.length > 1) Sound.play('turn');
+  maybeAI(m);
+}
+async function finishMatch(m, winner) {
+  m.phase = 'victory'; m.winner = winner; m.elapsedBase = elapsed(m); m.frozen = true; clearAI(m); Store.del('match');
+  say(m, winner, STR.win(winner.name, m.theme.goal)); banner('win', STR.banner.win(winner.name), 3200);
+  m.view.setActive(winner.i); updateAll(m); Sound.play('win'); Sound.buzz([60, 40, 60, 40, 140]);
+  const r = q('#board-svg').getBoundingClientRect();
+  Confetti.burst(90, r.left + r.width / 2, r.top + r.height * 0.45, 6.2, 720);
+  m.scope.after(550, () => Confetti.burst(60, r.left + r.width * 0.25, r.top + r.height * 0.5, 2.4, 650));
+  m.scope.after(900, () => Confetti.burst(60, r.left + r.width * 0.75, r.top + r.height * 0.5, 2.4, 650));
+  const info = recordMatch(m);
+  await m.scope.sleep(reducedMotion() ? 500 : 1800);
+  showSummary(m, info);
+}
+function recordMatch(m) {
+  const w = m.winner, humanWin = w.type === 'human', before = new Set(THEME_ORDER.filter(isUnlocked));
+  profile.matches++; profile.totalRolls += m.rollCount; profile.playMs += m.elapsedBase; profile.longestGame = Math.max(profile.longestGame, m.rollCount);
+  m.players.forEach(p => { profile.ladders += p.stats.ladders; profile.snakes += p.stats.snakes; profile.sixes += p.stats.sixes; });
+  profile.themeUse[m.cfg.theme] = (profile.themeUse[m.cfg.theme] || 0) + 1;
+  if (humanWin) {
+    profile.humanWins++; profile.streak++; profile.bestStreak = Math.max(profile.bestStreak, profile.streak);
+    profile.fastestWin = profile.fastestWin == null ? w.stats.rolls : Math.min(profile.fastestWin, w.stats.rolls);
+    profile.themesWon[m.cfg.theme] = 1; profile.modesWon[m.cfg.mode] = 1;
+    profile.leaderboard.push({ name: w.name, rolls: w.stats.rolls, mode: m.cfg.mode, theme: m.cfg.theme, date: Date.now() });
+    profile.leaderboard.sort((a, b) => a.rolls - b.rolls || a.date - b.date); profile.leaderboard = profile.leaderboard.slice(0, CFG.leaderboardMax);
+  } else { profile.computerWins++; profile.streak = 0; }
+  award('first', m); if (profile.matches >= 10) award('road', m);
+  if (humanWin) {
+    if (w.stats.snakes >= 3) award('comeback', m); if (m.cfg.mode === 'quick') award('quick', m); if (m.cfg.mode === 'wild') award('wild', m);
+    if (w.stats.blocked + w.stats.bounces > 0) award('patient', m);
+  }
+  if (Object.keys(profile.themesWon).length >= 3) award('grand', m);
+  if (profile.streak >= 3) award('streak', m);
+  if (m.players.some(p => p.type === 'human' && p.stats.sixes >= 3)) award('sixes', m);
+  saveProfile();
+  const unlocked = THEME_ORDER.filter(id => isUnlocked(id) && !before.has(id));
+  unlocked.forEach(id => toast('New world unlocked!', THEMES[id].name));
+  return { unlocked, ach: m.newAch.slice() };
+}
+function showSummary(m, info) {
+  const body = q('#summary-body'), w = m.winner; body.replaceChildren();
+  const ranking = m.players.slice().sort((a, b) => a === w ? -1 : b === w ? 1 : b.pos - a.pos);
+  body.append(h('div', { class: 'win-hero' }, pieceIcon(w.piece, 68), h('h2', { text: `${w.name} wins!` }),
+    h('p', { text: `Arrived at ${m.theme.goal} in ${plural(w.stats.rolls, 'roll')}. Match: ${plural(m.rollCount, 'roll')} · ${fmtTime(m.elapsedBase)}${m.cfg.mode === 'wild' ? ' · Board #' + m.cfg.seed : ''}` })));
+  body.append(h('ol', { class: 'rank', 'aria-label': 'Final standings' }, ranking.map((p, k) => h('li', {}, h('b', { text: '#' + (k + 1) }), pieceIcon(p.piece, 30), h('span', { class: 'nm', text: p.name }), h('span', { text: p === w ? '★ Tile 100' : 'Tile ' + p.pos })))));
+  const rows = [['Rolls', p => p.stats.rolls], ['Highest roll', p => p.stats.highest || '–'], ['Sixes', p => p.stats.sixes], ['Ladders climbed', p => p.stats.ladders], ['Snakes slid', p => p.stats.snakes],
+    ['Biggest climb', p => p.stats.maxClimb ? '+' + p.stats.maxClimb : '–'], ['Biggest slide', p => p.stats.maxSlide ? '−' + p.stats.maxSlide : '–'], ['Final tile', p => p.pos]];
+  body.append(h('div', { style: 'overflow-x:auto' }, h('table', {}, h('thead', {}, h('tr', {}, h('th', { text: 'Match stats' }), m.players.map(p => h('th', { style: 'max-width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap', text: p.name })))),
+    h('tbody', {}, rows.map(r => h('tr', {}, h('td', { text: r[0] }), m.players.map(p => h('td', { text: String(r[1](p)) }))))))));
+  const counts = [0, 0, 0, 0, 0, 0]; m.rolls.forEach(r => { counts[r - 1]++; }); const mx = Math.max(1, ...counts);
+  body.append(h('div', {}, h('h3', { text: 'Every roll this match' }), h('div', { class: 'dist', role: 'img', 'aria-label': 'Roll counts: ' + counts.map((c, k) => `${k + 1}: ${c}`).join(', ') },
+    counts.map((c, k) => h('div', {}, h('span', { text: String(c) }), h('i', { style: `height:${Math.max(4, c / mx * 48)}px` }), h('span', { text: String(k + 1) }))))));
+  if (info.ach.length) body.append(h('div', {}, h('h3', { text: 'Badges unlocked' }), h('ul', { class: 'bul' }, info.ach.map(id => { const a = ACH.find(x => x.id === id); return h('li', {}, h('b', { text: a.name + ' — ' }), a.desc); }))));
+  if (info.unlocked.length) body.append(h('div', {}, h('h3', { text: 'New worlds unlocked' }), h('ul', { class: 'bul' }, info.unlocked.map(id => h('li', {}, h('b', { text: THEMES[id].name }), ' — ' + THEMES[id].tag)))));
+  const d = q('#d-summary'), rem = h('button', { class: 'btn primary big', onclick: () => { closeDialog(d); startMatch(m.cfg); } }, '↻ Rematch');
+  body.append(h('div', { class: 'dlg-actions' }, rem, h('button', { class: 'btn', onclick: () => { closeDialog(d); leaveMatch(); showScreen('setup'); renderSetup(); } }, 'Change setup'), h('button', { class: 'btn', onclick: () => { closeDialog(d); leaveMatch(); showScreen('title'); } }, 'Main menu')));
+  openDialog(d); rem.focus();
+}
+function leaveMatch() { if (M) { M.scope.cancel(); M = null; } Confetti.clear(); Coach.hide(); document.body.dataset.phase = ''; }
+
+/* --- persistence of an in-progress match --- */
+function saveMatch(m) {
+  if (m.phase === 'victory') return;
+  Store.set('match', { v: 1, cfg: m.cfg, players: m.players.map(p => ({ piece: p.piece, name: p.name, type: p.type, pos: p.pos, stats: p.stats })),
+    current: m.current, rollCount: m.rollCount, bonusChain: m.bonusChain, rolls: m.rolls.slice(-600), log: m.log.slice(-CFG.logMax), elapsed: elapsed(m) });
+}
+function loadSavedMatch() {
+  const r = Store.get('match', null);
+  if (!r || r.v !== 1 || !r.cfg || typeof r.cfg !== 'object' || !Array.isArray(r.players) || r.players.length < CFG.minPlayers || r.players.length > CFG.maxPlayers) return null;
+  try {
+    const c = r.cfg, cfg = { mode: ['classic', 'quick', 'wild'].includes(c.mode) ? c.mode : null, theme: THEMES[c.theme] ? c.theme : null, finish: ['exact', 'bounce'].includes(c.finish) ? c.finish : null,
+      bonusSix: c.bonusSix === true, randomOrder: c.randomOrder === true, seed: cleanSeed(c.seed), count: 0, players: [] };
+    if (!cfg.mode || !cfg.theme || !cfg.finish || (cfg.mode === 'wild' && !cfg.seed)) return null;
+    const players = r.players.map(p => {
+      if (!p || typeof p !== 'object') throw new Error('bad player');
+      const piece = Math.floor(num(p.piece, -1)), pos = Math.floor(num(p.pos, 0));
+      if (piece < 0 || piece > 3 || pos < 1 || pos >= CFG.size) throw new Error('bad player');
+      const st = newStats(); if (p.stats && typeof p.stats === 'object') Object.keys(st).forEach(k => { st[k] = Math.max(0, Math.floor(num(p.stats[k]))); });
+      return { piece, name: cleanName(p.name, 'Player'), type: p.type === 'computer' ? 'computer' : 'human', pos, stats: st };
+    });
+    cfg.count = players.length; cfg.players = players.map(p => ({ name: p.name, type: p.type }));
+    const current = Math.floor(num(r.current, 0)); if (current < 0 || current >= players.length) return null;
+    const rolls = Array.isArray(r.rolls) ? r.rolls.filter(x => Number.isInteger(x) && x >= 1 && x <= 6).slice(-600) : [];
+    const log = Array.isArray(r.log) ? r.log.filter(e => e && typeof e.text === 'string').slice(-CFG.logMax).map(e => ({ i: Math.floor(num(e.i, -1)), piece: clamp(Math.floor(num(e.piece, -1)), -1, 3), text: e.text.slice(0, 200) })) : [];
+    return { cfg, saved: { players, current, rollCount: Math.max(0, Math.floor(num(r.rollCount))), bonusChain: clamp(Math.floor(num(r.bonusChain)), 0, CFG.bonusSixMaxChain), rolls, log, elapsed: Math.max(0, num(r.elapsed)) } };
+  } catch (e) { return null; }
+}
+
+/* --- first-match coach (non-blocking, skippable) --- */
+const Coach = {
+  step: 0, on: false, spot: null,
+  start() { this.step = 0; this.on = true; this.render(); },
+  hide() { this.on = false; q('#coach').hidden = true; if (this.spot) { this.spot.classList.remove('spot'); this.spot = null; } if (M) M.view.focus(null); },
+  finish() { this.hide(); profile.tutorialDone = true; saveProfile(); },
+  render() {
+    const st = STR.coach[this.step], host = q('#coach'), m = M; if (!m) return;
+    host.hidden = false; host.replaceChildren(h('h4', { text: st.title }), h('p', { text: st.text }),
+      h('div', { class: 'btns' }, h('button', { class: 'btn sm', onclick: () => this.finish() }, 'Skip'),
+        h('button', { class: 'btn sm primary', onclick: () => { if (this.step >= STR.coach.length - 1) this.finish(); else { this.step++; this.render(); } } }, this.step >= STR.coach.length - 1 ? 'Got it!' : 'Next')));
+    if (this.spot) this.spot.classList.remove('spot');
+    this.spot = q(st.sel); if (this.spot) this.spot.classList.add('spot');
+    const longest = o => Object.keys(o).map(Number).sort((a, b) => Math.abs(o[b] - b) - Math.abs(o[a] - a))[0];
+    if (this.step === 2) m.view.focus({ type: 'ladder', from: longest(m.board.ladders) }); else if (this.step === 3) m.view.focus({ type: 'snake', from: longest(m.board.snakes) }); else m.view.focus(null);
+  }
+};
+
+/* ---------- 13. UI: screens, setup, dialogs ---------- */
+let curScreen = 'title';
+const saveSetup = () => Store.set('setup', SU);
+function validTheme() { if (!isUnlocked(SU.theme)) SU.theme = 'sunset'; return SU.theme; }
+function showScreen(name) {
+  curScreen = name;
+  qa('.screen').forEach(sc => sc.classList.toggle('active', sc.id === 'screen-' + name));
+  if (name === 'title') { const id = validTheme(); applyTheme(id); Preview.start(id); q('#btn-continue').hidden = !loadSavedMatch(); }
+  else Preview.stop();
+  if (name === 'setup') applyTheme(validTheme());
+  const target = name === 'game' ? q('#btn-roll') : q('#screen-' + name + ' [tabindex="-1"]');
+  if (target) target.focus({ preventScroll: true });
+  window.scrollTo(0, 0);
+}
+function keepFocus(fn) {
+  const a = document.activeElement, k = a && a.dataset ? a.dataset.k : null; fn();
+  if (k) { const el = q('[data-k="' + k + '"]'); if (el) el.focus({ preventScroll: true }); }
+}
+function seg(options, value, onChange, label, key) {
+  const wrap = h('div', { class: 'seg', role: 'group', 'aria-label': label });
+  const btns = options.map(o => h('button', { type: 'button', 'data-k': key + ':' + o.value, 'aria-pressed': String(o.value === value), onclick: () => {
+    value = o.value; btns.forEach((b, k) => b.setAttribute('aria-pressed', String(options[k].value === value))); Sound.resume(); Sound.play('click'); onChange(value);
+  } }, o.label));
+  wrap.append(...btns); return wrap;
+}
+function confirmBtn(label, confirmLabel, action, cls) {
+  let armed = false, t = 0;
+  const b = h('button', { type: 'button', class: 'btn ' + (cls || ''), onclick: () => {
+    if (!armed) { armed = true; b.textContent = confirmLabel; clearTimeout(t); t = setTimeout(() => { armed = false; b.textContent = label; }, 4000); return; }
+    clearTimeout(t); armed = false; b.textContent = label; action();
+  } }, label);
+  return b;
+}
+function renderModes() {
+  q('#su-modes').replaceChildren(...['classic', 'quick', 'wild'].map(id => h('button', { type: 'button', class: 'card', 'data-k': 'mode:' + id, 'aria-pressed': String(SU.mode === id), onclick: () => {
+    SU.mode = id; saveSetup(); Sound.resume(); Sound.play('click'); keepFocus(() => { renderModes(); renderSeed(); renderPreview(); });
+  } }, h('b', { text: STR.modes[id].name }), h('small', { text: STR.modes[id].desc }))));
+}
+function renderSeed() { q('#su-seed-row').hidden = SU.mode !== 'wild'; const i = q('#su-seed'); if (i.value !== SU.seed) i.value = SU.seed; }
+function renderPlayers() {
+  const cnt = q('#su-count'), list = q('#su-players');
+  cnt.replaceChildren(seg([2, 3, 4].map(n => ({ value: n, label: n + ' players' })), SU.count, v => { SU.count = v; saveSetup(); keepFocus(renderPlayers); }, 'Number of players', 'count'));
+  list.replaceChildren(...SU.players.slice(0, SU.count).map((p, k) => {
+    const input = h('input', { type: 'text', maxlength: CFG.nameMax, value: p.name, autocomplete: 'off', 'aria-label': `Player ${k + 1} name`, placeholder: `Player ${k + 1}`, oninput: e => { SU.players[k].name = e.target.value.slice(0, CFG.nameMax); saveSetup(); } });
+    return h('div', { class: 'prow' }, pieceIcon(k, 40), input, seg([{ value: 'human', label: 'Human' }, { value: 'computer', label: 'Computer' }], p.type, v => {
+      SU.players[k].type = v; const cur = SU.players[k].name.trim();
+      if (!cur || cur === `Player ${k + 1}` || cur === `Computer ${k + 1}`) { SU.players[k].name = v === 'computer' ? `Computer ${k + 1}` : `Player ${k + 1}`; input.value = SU.players[k].name; }
+      saveSetup();
+    }, `Player ${k + 1} type`, 'ptype' + k));
+  }));
+}
+function renderThemes() {
+  validTheme();
+  q('#su-themes').replaceChildren(...THEME_ORDER.map(id => {
+    const th = THEMES[id], un = isUnlocked(id);
+    return h('button', { type: 'button', class: 'card', 'data-k': 'theme:' + id, 'aria-pressed': String(SU.theme === id), 'aria-disabled': String(!un), onclick: () => {
+      if (!isUnlocked(id)) { Sound.resume(); Sound.play('error'); toast('Locked world', `${th.name}: ${unlockText(id)}`); return; }
+      SU.theme = id; saveSetup(); applyTheme(id); Sound.resume(); Sound.play('click'); keepFocus(() => { renderThemes(); renderPreview(); });
+    } }, h('div', { class: 'swatch', style: 'background:linear-gradient(90deg,' + th.sky.map(x => x[1]).join(',') + ')' }), h('b', { text: th.name }), h('small', { text: th.tag }), un ? null : h('span', { class: 'lock', text: '🔒 ' + unlockText(id) }));
+  }));
+}
+function renderRules() {
+  const rule = (title, control, desc) => h('div', { class: 'rule' }, h('span', { class: 'lab', text: title }), control, h('p', { text: desc }));
+  const onoff = (key, label) => seg([{ value: true, label: 'On' }, { value: false, label: 'Off' }], SU[key], v => { SU[key] = v; saveSetup(); renderPreview(); }, label, key);
+  q('#su-rules').replaceChildren(
+    rule('Finish rule', seg([{ value: 'exact', label: 'Exact finish' }, { value: 'bounce', label: 'Bounce back' }], SU.finish, v => { SU.finish = v; saveSetup(); renderPreview(); }, 'Finish rule', 'finish'), 'Exact: you must roll exactly what you need to land on 100. Bounce: extra steps bounce you back from 100.'),
+    rule('Bonus roll on six', onoff('bonusSix', 'Bonus roll on six'), 'Roll a 6 and roll again (up to two bonus rolls in a row).'),
+    rule('Random turn order', onoff('randomOrder', 'Random turn order'), 'Shuffle who goes first. Pieces keep their own shape and number.'));
+}
+function renderPreview() {
+  const th = THEMES[validTheme()];
+  const board = SU.mode === 'wild' ? 'A fresh, balanced board is generated for every match.' : `${plural(Object.keys(CLASSIC.ladders).length, 'ladder')} and ${plural(Object.keys(CLASSIC.snakes).length, 'snake')}.`;
+  q('#su-preview').textContent = `Race from ${th.start} to ${th.goal}. ${board} ${SU.finish === 'exact' ? 'Land exactly on 100 to win.' : 'Overshoot 100 and you bounce back.'}${SU.bonusSix ? ' A six gives a bonus roll.' : ''}${SU.mode === 'quick' ? ' Faster animations.' : ''}${SU.randomOrder ? ' Turn order is shuffled.' : ''}`;
+}
+function renderSetup() { renderModes(); renderSeed(); renderPlayers(); renderThemes(); renderRules(); renderPreview(); }
+function startFromSetup() {
+  SU.count = clamp(SU.count, CFG.minPlayers, CFG.maxPlayers); saveSetup(); Sound.resume(); startMatch(buildCfg(SU));
+}
+function startQuick() {
+  const su = { ...SU, mode: 'quick', count: 2, seed: '', players: [{ name: SU.players[0].name, type: 'human' }, { name: 'Computer 2', type: 'computer' }] };
+  Sound.resume(); startMatch(buildCfg(su));
+}
+
+/* --- pause, settings, stats dialogs --- */
+function openPause() {
+  if (!M) return;
+  const d = q('#d-pause'), a = q('#pause-actions');
+  a.replaceChildren(
+    h('button', { class: 'btn primary', onclick: () => closeDialog(d) }, '▶ Resume'),
+    confirmBtn('↻ Restart match', 'Tap again to restart', () => { closeDialog(d); startMatch(M.cfg); }),
+    h('button', { class: 'btn', onclick: () => openDialog(q('#d-rules')) }, 'How to play'),
+    h('button', { class: 'btn', onclick: () => { renderSettings(); openDialog(q('#d-settings')); } }, 'Settings'),
+    h('button', { class: 'btn', onclick: () => { closeDialog(d); leaveMatch(); showScreen('title'); } }, 'Quit to title'));
+  openDialog(d);
+}
+function applySettings() {
+  document.documentElement.classList.toggle('large', settings.largeText);
+  document.documentElement.classList.toggle('rm', reducedMotion());
+  Sound.apply(); Scene.sync(); updateSoundBtn();
+}
+function renderSettings() {
+  const b = q('#settings-body'); b.replaceChildren();
+  const row = (label, sub, control) => h('div', { class: 'setrow' }, h('div', {}, h('span', { class: 'lab', text: label }), sub ? h('small', { text: sub }) : null), control);
+  const onoff = (key, label, after) => seg([{ value: true, label: 'On' }, { value: false, label: 'Off' }], settings[key], v => { settings[key] = v; saveSettings(); applySettings(); if (after) after(); }, label, 's-' + key);
+  const slider = (key, label) => h('input', { type: 'range', min: 0, max: 100, value: Math.round(settings[key] * 100), 'aria-label': label, oninput: e => { settings[key] = clamp(+e.target.value / 100, 0, 1); saveSettings(); Sound.apply(); }, onchange: () => { Sound.resume(); Sound.play('ladder'); } });
+  const items = [
+    row('Sound effects', 'Dice, hops, ladders, snakes and fanfares', onoff('sfx', 'Sound effects', () => Sound.resume())),
+    row('Effects volume', null, slider('sfxVol', 'Effects volume')),
+    row('Music', 'Gentle generated ambience that follows the world', onoff('music', 'Music', () => Sound.resume())),
+    row('Music volume', null, slider('musVol', 'Music volume')),
+    row('Animation speed', 'Changes timing only, never the rules', seg([{ value: 'relaxed', label: 'Relaxed' }, { value: 'normal', label: 'Normal' }, { value: 'fast', label: 'Fast' }], settings.speed, v => { settings.speed = v; saveSettings(); }, 'Animation speed', 's-speed')),
+    row('Reduced motion', 'Minimises movement and hides confetti. Results are still shown as text.', seg([{ value: 'auto', label: 'Auto' }, { value: 'reduce', label: 'On' }, { value: 'full', label: 'Off' }], settings.motion, v => { settings.motion = v; saveSettings(); applySettings(); }, 'Reduced motion', 's-motion')),
+    navigator.vibrate ? row('Vibration', 'Short buzzes on big moments (phones)', onoff('haptics', 'Vibration')) : null,
+    row('Larger text', 'Scales the interface', onoff('largeText', 'Larger text')),
+    h('div', { class: 'setrow' }, h('div', {}, h('span', { class: 'lab', text: 'Saved data' }), h('small', { text: 'Erases settings, stats, badges and any saved match on this device.' })),
+      confirmBtn('Erase all data', 'Tap again to erase', () => {
+        Store.wipe(); settings = sanitizeSettings(null); profile = sanitizeProfile(null); SU = sanitizeSetup(null);
+        applySettings(); renderSettings(); renderSetup(); q('#btn-continue').hidden = true; toast('Saved data erased', 'Everything is back to defaults.');
+      }, 'danger')),
+    Store.persistent() ? null : h('p', { class: 'note', text: 'This browser is blocking local storage, so progress only lasts until you close the tab.' })];
+  b.append(...items.filter(Boolean));
+}
+let statTab = 'stats';
+function renderStats() {
+  const tabs = q('#stat-tabs'), panel = q('#stat-panel');
+  tabs.replaceChildren(...[['stats', 'Stats'], ['badges', 'Badges'], ['worlds', 'Worlds'], ['records', 'Fastest wins']].map(([id, label]) => h('button', { type: 'button', role: 'tab', 'data-k': 'tab:' + id, 'aria-selected': String(statTab === id), onclick: () => { statTab = id; keepFocus(renderStats); } }, label)));
+  panel.replaceChildren();
+  const p = profile, date = ts => (ts ? new Date(ts).toLocaleDateString() : '');
+  if (statTab === 'stats') {
+    const fav = Object.entries(p.themeUse).sort((a, b) => b[1] - a[1])[0];
+    const items = [['Matches played', p.matches], ['Won by a person', p.humanWins], ['Won by a computer', p.computerWins], ['Win streak', `${p.streak} (best ${p.bestStreak})`],
+      ['Fastest win', p.fastestWin ? plural(p.fastestWin, 'roll') : '–'], ['Longest match', p.longestGame ? plural(p.longestGame, 'roll') : '–'], ['Average match', p.matches ? plural(Math.round(p.totalRolls / p.matches), 'roll') : '–'],
+      ['Ladders climbed', p.ladders], ['Snakes slid', p.snakes], ['Sixes rolled', p.sixes], ['Time played', fmtTime(p.playMs)], ['Favourite world', fav && THEMES[fav[0]] ? THEMES[fav[0]].name : '–']];
+    panel.append(h('p', { class: 'note', text: 'Statistics are saved only on this device. There are no online rankings.' }), h('div', { class: 'stat-grid', style: 'margin-top:10px' }, items.map(i => h('div', { class: 'stat' }, h('b', { text: String(i[1]) }), h('span', { text: i[0] })))));
+  } else if (statTab === 'badges') {
+    const got = ACH.filter(a => p.achievements[a.id]).length;
+    panel.append(h('p', { class: 'note', text: `${got} of ${ACH.length} badges unlocked.` }), h('div', { class: 'ach-grid', style: 'margin-top:10px' }, ACH.map(a => h('div', { class: 'ach' + (p.achievements[a.id] ? ' got' : '') }, h('b', { text: a.name }), h('small', { text: a.desc }), h('em', { text: p.achievements[a.id] ? '✓ Unlocked ' + date(p.achievements[a.id]) : '🔒 Locked' })))));
+  } else if (statTab === 'worlds') {
+    panel.append(h('p', { class: 'note', text: 'Worlds change the look and sound only — never the rules. Choose one on the setup screen.' }), h('div', { class: 'ach-grid', style: 'margin-top:10px' }, THEME_ORDER.map(id => {
+      const th = THEMES[id], un = isUnlocked(id);
+      return h('div', { class: 'ach' + (un ? ' got' : '') }, h('div', { class: 'swatch', style: 'background:linear-gradient(90deg,' + th.sky.map(x => x[1]).join(',') + ')' }), h('b', { text: th.name }), h('small', { text: `${th.start} → ${th.goal}` }), h('em', { text: un ? `✓ Unlocked · played ${p.themeUse[id] || 0}×` : '🔒 ' + unlockText(id) }));
+    })));
+  } else {
+    panel.append(h('p', { class: 'note', text: 'Local records for this device only — fewest rolls to win a match.' }));
+    if (!p.leaderboard.length) panel.append(h('p', { style: 'margin-top:10px', text: 'No records yet. Win a match as a human player to set the first one!' }));
+    else panel.append(h('ol', { class: 'rank', style: 'margin-top:10px' }, p.leaderboard.map((e, k) => h('li', {}, h('b', { text: '#' + (k + 1) }), h('span', { class: 'nm', text: e.name }), h('span', { text: `${plural(e.rolls, 'roll')} · ${THEMES[e.theme] ? THEMES[e.theme].name : ''} · ${date(e.date)}` })))));
+  }
+}
+
+/* ---------- 14. BOOT & INPUT ---------- */
+function onDialogClose() { if (!dialogOpen() && M) { M.aiWaiting = false; maybeAI(M); } }
+function wire() {
+  q('#btn-play').addEventListener('click', () => { showScreen('setup'); renderSetup(); });
+  q('#btn-quick').addEventListener('click', startQuick);
+  q('#btn-continue').addEventListener('click', () => { const sv = loadSavedMatch(); if (sv) startMatch(sv.cfg, sv.saved); else { q('#btn-continue').hidden = true; toast('No saved match found'); } });
+  q('#btn-rules').addEventListener('click', () => openDialog(q('#d-rules')));
+  q('#btn-stats').addEventListener('click', () => { renderStats(); openDialog(q('#d-stats')); });
+  q('#btn-settings').addEventListener('click', () => { renderSettings(); openDialog(q('#d-settings')); });
+  q('#setup-back').addEventListener('click', () => showScreen('title'));
+  q('#su-start').addEventListener('click', startFromSetup);
+  q('#su-seed').addEventListener('input', e => { SU.seed = cleanSeed(e.target.value); if (e.target.value !== SU.seed) e.target.value = SU.seed; saveSetup(); });
+  q('#g-menu').addEventListener('click', openPause);
+  q('#g-settings').addEventListener('click', () => { renderSettings(); openDialog(q('#d-settings')); });
+  q('#g-sound').addEventListener('click', () => { settings.sfx = !settings.sfx; saveSettings(); applySettings(); Sound.resume(); Sound.play('click'); });
+  q('#btn-roll').addEventListener('click', onRollRequest);
+  q('#die').addEventListener('click', onRollRequest);
+  qa('dialog').forEach(d => { d.addEventListener('close', onDialogClose); d.addEventListener('click', e => { if (e.target === d) closeDialog(d); }); });
+  document.addEventListener('click', e => {
+    const c = e.target.closest ? e.target.closest('[data-close]') : null; if (c) closeDialog(c.closest('dialog'));
+    if (e.target.closest && e.target.closest('.btn') && !e.target.closest('#btn-roll')) { Sound.resume(); Sound.play('click'); }
+  });
+  const unlockAudio = () => Sound.resume();
+  document.addEventListener('pointerdown', unlockAudio, { once: true }); document.addEventListener('keydown', unlockAudio, { once: true });
+  document.addEventListener('keydown', e => {
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || curScreen !== 'game' || !M || dialogOpen()) return;
+    const tag = (e.target.tagName || '').toLowerCase(), field = tag === 'input' || tag === 'textarea' || tag === 'select', key = e.key.toLowerCase();
+    if (e.key === 'Escape') { e.preventDefault(); openPause(); return; }
+    if (field) return;
+    if (key === 'r' || (e.key === ' ' && tag !== 'button' && tag !== 'summary')) { e.preventDefault(); onRollRequest(); }
+    else if (key === 'm') { settings.sfx = !settings.sfx; saveSettings(); applySettings(); toast(settings.sfx ? 'Sound on' : 'Sound off'); }
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (M && !M.frozen) { if (document.hidden) M.elapsedBase += performance.now() - M.seg; else M.seg = performance.now(); }
+    Scene.sync();
+  });
+  if (mqRM.addEventListener) mqRM.addEventListener('change', applySettings);
+}
+function boot() {
+  buildDie(); applySettings(); wire(); showScreen('title');
+  if (DEBUG) window.__snl = { get match() { return M; }, Dice, Engine, CFG, profile: () => profile, startMatch, buildCfg, setup: () => SU, forceRolls: (...r) => { Dice.forced.push(...r); }, validateBoard, generateWild, CLASSIC };
+}
+try { boot(); }
+catch (err) {
+  console.error(err);
+  document.body.append(h('p', { style: 'position:fixed;inset:auto 12px 12px;z-index:300;background:#10141f;color:#fff;padding:12px;border-radius:12px', text: 'Something went wrong while starting the game. Please reload the page.' }));
+}
+
+</script>
+</body>
+</html>
